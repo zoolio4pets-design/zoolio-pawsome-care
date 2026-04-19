@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import type { DateRange } from "react-day-picker";
 import heroImage from "@/assets/hero-pets.jpg";
+import heroVideo from "@/assets/hero-pets.mp4.asset.json";
 
 const services = [
   { value: "boarding", label: "Boarding" },
@@ -36,12 +37,15 @@ export const HeroSearch = () => {
     <section className="relative isolate overflow-hidden">
       {/* Background image */}
       <div className="absolute inset-0 -z-10">
-        <img
-          src={heroImage}
-          alt="Two happy dogs playing together in a sunny South African garden"
+        <video
+          src={heroVideo.url}
+          poster={heroImage}
+          autoPlay
+          loop
+          muted
+          playsInline
           className="h-full w-full object-cover"
-          width={1920}
-          height={1080}
+          aria-label="Two happy dogs playing together in a sunny South African garden"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-foreground/60 via-foreground/30 to-background" />
         <div className="absolute inset-0 bg-gradient-to-r from-foreground/40 to-transparent" />
@@ -193,9 +197,21 @@ export const HeroSearch = () => {
             </div>
           </div>
 
-          <p className="mt-4 text-sm text-background/90 drop-shadow">
-            Popular: Cape Town · Sandton · Durban North · Stellenbosch · Pretoria East
-          </p>
+          <div className="mt-4 text-sm text-background/90 drop-shadow flex flex-wrap gap-x-2 gap-y-1 items-center">
+            <span>Popular:</span>
+            {["Cape Town", "Sandton", "Durban North", "Stellenbosch", "Pretoria East"].map((city, i) => (
+              <span key={city} className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setLocation(city)}
+                  className="underline-offset-4 hover:underline hover:text-background transition-colors"
+                >
+                  {city}
+                </button>
+                {i < 4 && <span aria-hidden>·</span>}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
     </section>
