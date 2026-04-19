@@ -193,7 +193,7 @@ export const HeroSearch = () => {
             </div>
           </div>
 
-          <p className="mt-4 text-sm text-muted-foreground">
+          <p className="mt-4 text-sm text-background/90 drop-shadow">
             Popular: Cape Town · Sandton · Durban North · Stellenbosch · Pretoria East
           </p>
         </div>
