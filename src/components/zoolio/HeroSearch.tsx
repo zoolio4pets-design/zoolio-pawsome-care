@@ -13,12 +13,25 @@ import heroImage from "@/assets/hero-pets.jpg";
 import heroVideo from "@/assets/hero-pets.mp4.asset.json";
 
 const services = [
-  { value: "boarding", label: "Boarding" },
-  { value: "house-sitting", label: "House Sitting" },
-  { value: "drop-in", label: "Drop-In Visits" },
   { value: "walking", label: "Dog Walking" },
-  { value: "daycare", label: "Doggy Day Care" },
-  { value: "training", label: "Training" },
+  { value: "drop-in", label: "Drop-In Visits" },
+  { value: "daycare", label: "Day Care" },
+  { value: "grooming", label: "Health, Wellness & Grooming" },
+  { value: "boarding", label: "Boarding" },
+  { value: "house-sitting", label: "Pet & House Sitting" },
+  { value: "digital-events", label: "Digital & Event Services" },
+  { value: "aquatic", label: "Aquarium & Aquatic" },
+  { value: "reptile", label: "Reptile & Exotic" },
+  { value: "small-animal", label: "Small Animal & Bird" },
+];
+
+// Services that support time-of-day filtering (time-sensitive bookings)
+const TIME_SLOT_SERVICES = new Set(["walking", "drop-in", "grooming", "daycare"]);
+
+const timeSlots = [
+  { value: "morning", label: "Morning", hours: "6am – 11am" },
+  { value: "midday", label: "Midday", hours: "11am – 3pm" },
+  { value: "evening", label: "Evening", hours: "3pm – 10pm" },
 ];
 
 const petSizes = ["Small (0–7kg)", "Medium (7–18kg)", "Large (18–40kg)", "Giant (40kg+)"];
@@ -28,10 +41,18 @@ const filters = [
 ];
 
 export const HeroSearch = () => {
-  const [service, setService] = useState("boarding");
+  const [service, setService] = useState("walking");
   const [location, setLocation] = useState("");
   const [dates, setDates] = useState<DateRange | undefined>();
   const [petType, setPetType] = useState("dog");
+  const [selectedSlots, setSelectedSlots] = useState<string[]>([]);
+
+  const showTimeSlots = TIME_SLOT_SERVICES.has(service);
+
+  const toggleSlot = (value: string) =>
+    setSelectedSlots((prev) =>
+      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
+    );
 
   return (
     <section className="relative isolate overflow-hidden">
@@ -161,8 +182,41 @@ export const HeroSearch = () => {
                     <SlidersHorizontal className="h-4 w-4 mr-2" /> Advanced filters <ChevronDown className="h-4 w-4 ml-1" />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-[min(92vw,420px)] rounded-2xl p-5" align="start">
+                <PopoverContent className="w-[min(92vw,420px)] rounded-2xl p-5 max-h-[80vh] overflow-y-auto" align="start">
                   <div className="space-y-4">
+                    {showTimeSlots && (
+                      <div>
+                        <Label className="text-xs font-bold uppercase tracking-wide text-muted-foreground">
+                          Preferred time of day
+                        </Label>
+                        <p className="mt-1 text-xs text-muted-foreground">
+                          Filter for walkers, groomers, drop-ins, or day care available during your preferred hours.
+                        </p>
+                        <div className="mt-2 flex flex-wrap gap-2">
+                          {timeSlots.map((slot) => {
+                            const active = selectedSlots.includes(slot.value);
+                            return (
+                              <button
+                                key={slot.value}
+                                type="button"
+                                onClick={() => toggleSlot(slot.value)}
+                                className={cn(
+                                  "px-3 py-2 rounded-full text-sm font-medium border transition-colors text-left",
+                                  active
+                                    ? "bg-primary text-primary-foreground border-primary"
+                                    : "bg-background text-foreground border-border hover:bg-secondary"
+                                )}
+                              >
+                                <span className="font-semibold">{slot.label}</span>
+                                <span className={cn("ml-2 text-xs", active ? "text-primary-foreground/80" : "text-muted-foreground")}>
+                                  {slot.hours}
+                                </span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
                     <div>
                       <Label className="text-xs font-bold uppercase tracking-wide text-muted-foreground">Pet size</Label>
                       <div className="mt-2 grid grid-cols-2 gap-2">
