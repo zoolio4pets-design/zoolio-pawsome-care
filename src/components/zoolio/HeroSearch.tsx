@@ -43,7 +43,8 @@ export const HeroSearch = () => {
           width={1920}
           height={1080}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-background/10 to-background" />
+        <div className="absolute inset-0 bg-gradient-to-b from-foreground/60 via-foreground/30 to-background" />
+        <div className="absolute inset-0 bg-gradient-to-r from-foreground/40 to-transparent" />
       </div>
 
       <div className="container-zoolio pt-16 pb-24 md:pt-28 md:pb-40">
@@ -51,11 +52,11 @@ export const HeroSearch = () => {
           <span className="inline-flex items-center gap-2 rounded-full bg-background/80 backdrop-blur px-4 py-1.5 text-xs font-semibold text-primary border border-border">
             <PawPrint className="h-3.5 w-3.5" /> Trusted by 50,000+ South African pet parents
           </span>
-          <h1 className="mt-5 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-foreground leading-[1.05]">
+          <h1 className="mt-5 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-background leading-[1.05] drop-shadow-md">
             Trusted pet care in your{" "}
-            <span className="italic text-primary">neighbourhood</span>
+            <span className="italic text-accent">neighbourhood</span>
           </h1>
-          <p className="mt-5 text-lg md:text-xl text-foreground/75 max-w-xl">
+          <p className="mt-5 text-lg md:text-xl text-background/90 max-w-xl drop-shadow">
             Book loving sitters and walkers across South Africa. Verified, insured, and reviewed by your community.
           </p>
         </div>
