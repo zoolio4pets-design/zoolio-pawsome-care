@@ -23,7 +23,7 @@ import { useGoToSearch } from "@/lib/search-state";
 
 export const HeroSearch = () => {
   const [category, setCategory] = useState<CategorySlug>("daytime");
-  const [subs, setSubs] = useState<SubServiceSlug[]>(["dog-walking"]);
+  const [sub, setSub] = useState<SubServiceSlug>("dog-walking");
   const [location, setLocation] = useState("");
   const [dates, setDates] = useState<DateRange | undefined>();
   const [pets, setPets] = useState<Pet[]>([]);
@@ -36,26 +36,22 @@ export const HeroSearch = () => {
   );
 
   const showTimeSlots = useMemo(
-    () => subs.some((s) => TIME_SLOT_SERVICES.has(s)),
-    [subs],
+    () => TIME_SLOT_SERVICES.has(sub),
+    [sub],
   );
 
-  // When category changes, ensure selected subs all belong to it.
+  // When category changes, ensure selected sub belongs to it.
   useEffect(() => {
-    setSubs((prev) => {
-      const valid = prev.filter((s) => activeCategory.subs.some((sub) => sub.slug === s));
-      return valid.length ? valid : [activeCategory.subs[0].slug];
-    });
+    setSub((prev) =>
+      activeCategory.subs.some((s) => s.slug === prev) ? prev : activeCategory.subs[0].slug,
+    );
   }, [activeCategory]);
-
-  const toggleSub = (slug: SubServiceSlug) =>
-    setSubs((prev) => (prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug]));
 
   const toggleSlot = (v: string) =>
     setTimeSlots((prev) => (prev.includes(v) ? prev.filter((s) => s !== v) : [...prev, v]));
 
   const handleSearch = () => {
-    goToSearch({ category, subs, location, dates, pets, timeSlots });
+    goToSearch({ category, subs: [sub], location, dates, pets, timeSlots });
   };
 
   return (
