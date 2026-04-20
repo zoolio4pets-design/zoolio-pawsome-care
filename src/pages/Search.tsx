@@ -61,9 +61,9 @@ const Search = () => {
     });
   }, [state, showTimeSlots]);
 
-  const toggleSub = (slug: SubServiceSlug) => {
-    const next = state.subs.includes(slug) ? state.subs.filter((s) => s !== slug) : [...state.subs, slug];
-    update({ subs: next });
+  const selectSub = (slug: SubServiceSlug) => {
+    // Single-select: clicking the active chip clears it; otherwise replace selection.
+    update({ subs: state.subs[0] === slug ? [] : [slug] });
   };
   const toggleSlot = (v: string) => {
     const next = state.timeSlots.includes(v) ? state.timeSlots.filter((s) => s !== v) : [...state.timeSlots, v];
@@ -112,7 +112,9 @@ const Search = () => {
             return (
               <button
                 key={sub.slug}
-                onClick={() => toggleSub(sub.slug)}
+                onClick={() => selectSub(sub.slug)}
+                role="radio"
+                aria-checked={active}
                 className={cn(
                   "px-3 py-1.5 rounded-full text-xs font-medium border transition-colors",
                   active

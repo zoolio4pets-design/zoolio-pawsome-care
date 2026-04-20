@@ -23,7 +23,7 @@ import { useGoToSearch } from "@/lib/search-state";
 
 export const HeroSearch = () => {
   const [category, setCategory] = useState<CategorySlug>("daytime");
-  const [subs, setSubs] = useState<SubServiceSlug[]>(["dog-walking"]);
+  const [sub, setSub] = useState<SubServiceSlug>("dog-walking");
   const [location, setLocation] = useState("");
   const [dates, setDates] = useState<DateRange | undefined>();
   const [pets, setPets] = useState<Pet[]>([]);
@@ -36,26 +36,22 @@ export const HeroSearch = () => {
   );
 
   const showTimeSlots = useMemo(
-    () => subs.some((s) => TIME_SLOT_SERVICES.has(s)),
-    [subs],
+    () => TIME_SLOT_SERVICES.has(sub),
+    [sub],
   );
 
-  // When category changes, ensure selected subs all belong to it.
+  // When category changes, ensure selected sub belongs to it.
   useEffect(() => {
-    setSubs((prev) => {
-      const valid = prev.filter((s) => activeCategory.subs.some((sub) => sub.slug === s));
-      return valid.length ? valid : [activeCategory.subs[0].slug];
-    });
+    setSub((prev) =>
+      activeCategory.subs.some((s) => s.slug === prev) ? prev : activeCategory.subs[0].slug,
+    );
   }, [activeCategory]);
-
-  const toggleSub = (slug: SubServiceSlug) =>
-    setSubs((prev) => (prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug]));
 
   const toggleSlot = (v: string) =>
     setTimeSlots((prev) => (prev.includes(v) ? prev.filter((s) => s !== v) : [...prev, v]));
 
   const handleSearch = () => {
-    goToSearch({ category, subs, location, dates, pets, timeSlots });
+    goToSearch({ category, subs: [sub], location, dates, pets, timeSlots });
   };
 
   return (
@@ -113,13 +109,13 @@ export const HeroSearch = () => {
 
             {/* Subcategory chips */}
             <div className="flex flex-wrap gap-2 px-1 pb-3 border-b border-border">
-              {activeCategory.subs.map((sub) => {
-                const active = subs.includes(sub.slug);
+              {activeCategory.subs.map((s) => {
+                const active = sub === s.slug;
                 return (
                   <button
-                    key={sub.slug}
+                    key={s.slug}
                     type="button"
-                    onClick={() => toggleSub(sub.slug)}
+                    onClick={() => setSub(s.slug)}
                     className={cn(
                       "px-3 py-1.5 rounded-full text-xs font-medium border transition-colors",
                       active
@@ -127,7 +123,7 @@ export const HeroSearch = () => {
                         : "bg-background text-foreground/80 border-border hover:bg-secondary",
                     )}
                   >
-                    {sub.label}
+                    {s.label}
                   </button>
                 );
               })}
