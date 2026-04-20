@@ -109,10 +109,6 @@ export const HeroSearch = () => {
 
             {/* Subcategory chips */}
             <div className="flex flex-wrap gap-2 px-1 pb-3 border-b border-border">
-              {activeCategory.subs.map((sub) => {
-                const active = sub.slug === undefined;
-                return null;
-              })}
               {activeCategory.subs.map((s) => {
                 const active = sub === s.slug;
                 return (
