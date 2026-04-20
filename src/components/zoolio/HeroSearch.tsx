@@ -110,12 +110,16 @@ export const HeroSearch = () => {
             {/* Subcategory chips */}
             <div className="flex flex-wrap gap-2 px-1 pb-3 border-b border-border">
               {activeCategory.subs.map((sub) => {
-                const active = subs.includes(sub.slug);
+                const active = sub.slug === undefined;
+                return null;
+              })}
+              {activeCategory.subs.map((s) => {
+                const active = sub === s.slug;
                 return (
                   <button
-                    key={sub.slug}
+                    key={s.slug}
                     type="button"
-                    onClick={() => toggleSub(sub.slug)}
+                    onClick={() => setSub(s.slug)}
                     className={cn(
                       "px-3 py-1.5 rounded-full text-xs font-medium border transition-colors",
                       active
@@ -123,7 +127,7 @@ export const HeroSearch = () => {
                         : "bg-background text-foreground/80 border-border hover:bg-secondary",
                     )}
                   >
-                    {sub.label}
+                    {s.label}
                   </button>
                 );
               })}
