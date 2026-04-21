@@ -1,6 +1,24 @@
 import { useEffect, useMemo, useState } from "react";
-import { format } from "date-fns";
-import { CalendarIcon, ChevronDown, PawPrint, Search, SlidersHorizontal, Users } from "lucide-react";
+import { addDays, format } from "date-fns";
+import {
+  CalendarIcon,
+  ChevronDown,
+  Footprints,
+  Home,
+  Scissors,
+  Sparkles,
+  Camera,
+  Bed,
+  KeyRound,
+  Fish,
+  Bird,
+  Rabbit,
+  PawPrint,
+  Search,
+  SlidersHorizontal,
+  Users,
+  X,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -13,7 +31,7 @@ import {
   SERVICE_CATEGORIES,
   TIME_SLOTS,
   TIME_SLOT_SERVICES,
-  DURATIONS,
+  HERO_DURATIONS,
   type CategorySlug,
   type SubServiceSlug,
 } from "@/data/services";
@@ -21,6 +39,21 @@ import { POPULAR_LOCATIONS } from "@/data/locations";
 import { LocationCombobox } from "./LocationCombobox";
 import { PetDetailsModal, type Pet } from "./PetDetailsModal";
 import { useGoToSearch } from "@/lib/search-state";
+import { SITTERS } from "@/data/sitters";
+
+// Small icon per sub-service (Rover-style visual cues on chips).
+const SUB_ICONS: Record<SubServiceSlug, typeof PawPrint> = {
+  "dog-walking": Footprints,
+  "drop-in-visits": Home,
+  "wellness-grooming": Scissors,
+  "day-care": Sparkles,
+  "digital-events": Camera,
+  "boarding": Bed,
+  "house-sitting": KeyRound,
+  "aquatic": Fish,
+  "reptile-exotic": PawPrint,
+  "small-animal-bird": Bird,
+};
 
 export const HeroSearch = () => {
   const [category, setCategory] = useState<CategorySlug>("daytime");
