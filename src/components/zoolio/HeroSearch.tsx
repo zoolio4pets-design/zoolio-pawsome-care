@@ -89,6 +89,54 @@ export const HeroSearch = () => {
     goToSearch({ category, subs: [sub], location, dates, pets, timeSlots, duration });
   };
 
+  const clearAll = () => {
+    setLocation("");
+    setDates(undefined);
+    setPets([]);
+    setTimeSlots([]);
+    setDuration(undefined);
+  };
+
+  const hasAnyFilter =
+    !!location || !!dates?.from || pets.length > 0 || timeSlots.length > 0 || !!duration;
+
+  // Live "X providers match" counter against the mock dataset.
+  const matchCount = useMemo(() => {
+    return SITTERS.filter((s) => {
+      if (!s.services.includes(sub)) return false;
+      if (location && !`${s.suburb} ${s.city}`.toLowerCase().includes(location.toLowerCase()))
+        return false;
+      if (timeSlots.length && !timeSlots.some((t) => s.availableTimeSlots.includes(t as never)))
+        return false;
+      return true;
+    }).length;
+  }, [sub, location, timeSlots]);
+
+  // Quick presets — one-tap fills date + slot + duration + sub.
+  const applyPreset = (preset: "walk-today" | "dropin-evening" | "daycare-tomorrow") => {
+    const today = new Date();
+    if (preset === "walk-today") {
+      setCategory("daytime");
+      setSub("dog-walking");
+      setDates({ from: today, to: today });
+      setTimeSlots(["midday"]);
+      setDuration("60");
+    } else if (preset === "dropin-evening") {
+      setCategory("daytime");
+      setSub("drop-in-visits");
+      setDates({ from: today, to: today });
+      setTimeSlots(["evening"]);
+      setDuration("30");
+    } else {
+      setCategory("daytime");
+      setSub("day-care");
+      const t = addDays(today, 1);
+      setDates({ from: t, to: t });
+      setTimeSlots(["morning", "midday", "evening"]);
+      setDuration("240");
+    }
+  };
+
   return (
     <section className="relative isolate overflow-hidden">
       {/* Background video */}
@@ -123,6 +171,32 @@ export const HeroSearch = () => {
 
         {/* Search card */}
         <div className="mt-10 md:mt-14 max-w-5xl">
+          {/* Quick preset pills */}
+          <div className="mb-3 flex flex-wrap items-center gap-2 animate-fade-up">
+            <span className="text-xs font-semibold text-background/90 drop-shadow mr-1">Quick start:</span>
+            <button
+              type="button"
+              onClick={() => applyPreset("walk-today")}
+              className="inline-flex items-center gap-1.5 rounded-full bg-background/90 backdrop-blur px-3 py-1.5 text-xs font-semibold text-foreground border border-border hover:bg-background transition-colors"
+            >
+              <Footprints className="h-3.5 w-3.5 text-primary" /> 60-min walk today
+            </button>
+            <button
+              type="button"
+              onClick={() => applyPreset("dropin-evening")}
+              className="inline-flex items-center gap-1.5 rounded-full bg-background/90 backdrop-blur px-3 py-1.5 text-xs font-semibold text-foreground border border-border hover:bg-background transition-colors"
+            >
+              <Home className="h-3.5 w-3.5 text-primary" /> 30-min drop-in this evening
+            </button>
+            <button
+              type="button"
+              onClick={() => applyPreset("daycare-tomorrow")}
+              className="inline-flex items-center gap-1.5 rounded-full bg-background/90 backdrop-blur px-3 py-1.5 text-xs font-semibold text-foreground border border-border hover:bg-background transition-colors"
+            >
+              <Sparkles className="h-3.5 w-3.5 text-primary" /> Full day care tomorrow
+            </button>
+          </div>
+
           <div className="bg-card rounded-3xl shadow-search border border-border/60 p-3 md:p-4 animate-fade-up">
             {/* Main category tabs */}
             <div className="flex gap-1 overflow-x-auto pb-2 mb-2 border-b border-border scrollbar-none">
