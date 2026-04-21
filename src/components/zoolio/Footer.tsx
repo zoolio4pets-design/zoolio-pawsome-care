@@ -3,8 +3,8 @@ import { PawPrint, Instagram, Facebook, Twitter } from "lucide-react";
 const cols = [
   { title: "Services", links: ["Dog Boarding", "House Sitting", "Drop-In Visits", "Dog Walking", "Doggy Day Care", "Dog Training"] },
   { title: "Cities", links: ["Cape Town", "Johannesburg", "Durban", "Pretoria", "Stellenbosch", "Port Elizabeth"] },
-  { title: "Company", links: ["About Zoolio", "Careers", "Press", "Blog", "Help Centre", "Contact"] },
-  { title: "Legal", links: ["Terms", "Privacy", "ZoolioProtect", "Cookie Settings", "Trust & Safety"] },
+  { title: "Company", links: ["About Zoolio"] },
+  { title: "Legal", links: ["Terms", "Privacy", "Cookie Settings"] },
 ];
 
 export const Footer = () => (
