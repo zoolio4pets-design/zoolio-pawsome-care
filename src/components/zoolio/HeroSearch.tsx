@@ -365,14 +365,32 @@ export const HeroSearch = () => {
 
             {/* Action row */}
             <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-2 mt-3 pt-3 border-t border-border">
-              <button
-                type="button"
-                onClick={handleSearch}
-                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-foreground/70 hover:text-foreground self-start"
-              >
-                <SlidersHorizontal className="h-4 w-4" /> More filters
-                <ChevronDown className="h-4 w-4" />
-              </button>
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleSearch}
+                  className="inline-flex items-center gap-2 px-3 py-2 text-sm font-semibold text-foreground/70 hover:text-foreground"
+                >
+                  <SlidersHorizontal className="h-4 w-4" /> More filters
+                  <ChevronDown className="h-4 w-4" />
+                </button>
+                <span
+                  aria-live="polite"
+                  className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1 text-xs font-semibold text-foreground"
+                >
+                  <PawPrint className="h-3.5 w-3.5 text-primary" />
+                  {matchCount} provider{matchCount === 1 ? "" : "s"} match
+                </span>
+                {hasAnyFilter && (
+                  <button
+                    type="button"
+                    onClick={clearAll}
+                    className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold text-muted-foreground hover:text-foreground"
+                  >
+                    <X className="h-3.5 w-3.5" /> Clear all filters
+                  </button>
+                )}
+              </div>
 
               <Button
                 size="lg"
