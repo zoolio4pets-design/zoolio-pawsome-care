@@ -6,8 +6,6 @@ const links = [
   { label: "Find Care", href: "#services" },
   { label: "Become a Sitter", href: "#become-sitter" },
   { label: "Dog Training", href: "#training" },
-  { label: "Blog", href: "#blog" },
-  { label: "Help", href: "#help" },
 ];
 
 export const Header = () => {
