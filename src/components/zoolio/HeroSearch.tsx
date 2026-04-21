@@ -220,18 +220,20 @@ export const HeroSearch = () => {
             <div className="flex flex-wrap gap-2 px-1 pb-3 border-b border-border">
               {activeCategory.subs.map((s) => {
                 const active = sub === s.slug;
+                const Icon = SUB_ICONS[s.slug] ?? PawPrint;
                 return (
                   <button
                     key={s.slug}
                     type="button"
                     onClick={() => setSub(s.slug)}
                     className={cn(
-                      "px-3 py-1.5 rounded-full text-xs font-medium border transition-colors",
+                      "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors",
                       active
                         ? "bg-accent text-accent-foreground border-accent"
                         : "bg-background text-foreground/80 border-border hover:bg-secondary",
                     )}
                   >
+                    <Icon className="h-3.5 w-3.5" />
                     {s.label}
                   </button>
                 );
@@ -325,13 +327,13 @@ export const HeroSearch = () => {
                   })}
                 </div>
 
-                {/* Duration (single-select) */}
+                {/* Duration (single-select) — primary for hourly services */}
                 <div className="mt-3">
                   <div className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground mb-1.5">
                     Duration
                   </div>
                   <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="Duration">
-                    {DURATIONS.map((d) => {
+                    {HERO_DURATIONS.map((d) => {
                       const active = duration === d.value;
                       return (
                         <button
@@ -353,8 +355,9 @@ export const HeroSearch = () => {
                     })}
                   </div>
                   <p className="mt-2 text-[11px] leading-relaxed text-muted-foreground max-w-2xl">
-                    Please select a realistic duration that covers the full service your pet needs
-                    (including travel/setup time). Short bookings may be declined or adjusted by providers.
+                    Most providers recommend <span className="font-semibold text-foreground">60 minutes minimum</span> for
+                    walks, drop-ins &amp; grooming (includes travel + quality time). Shorter bookings may be declined or
+                    adjusted.
                   </p>
                 </div>
               </div>
