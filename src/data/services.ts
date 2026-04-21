@@ -152,6 +152,15 @@ export const DURATIONS = [
   { value: "240", label: "4+ hrs", minutes: 240 },
 ] as const;
 
+// Simplified duration set used in the hero "When" block (Rover-style minimal chips).
+export const HERO_DURATIONS = [
+  { value: "30", label: "30 min" },
+  { value: "60", label: "60 min" },
+  { value: "90", label: "90 min" },
+  { value: "120", label: "2 hrs" },
+  { value: "180", label: "3+ hrs" },
+] as const;
+
 export type DurationValue = (typeof DURATIONS)[number]["value"];
 
 export const formatDurationLabel = (v?: string) =>
