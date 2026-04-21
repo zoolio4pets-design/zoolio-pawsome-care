@@ -13,6 +13,7 @@ import {
   SERVICE_CATEGORIES,
   TIME_SLOTS,
   TIME_SLOT_SERVICES,
+  DURATIONS,
   type CategorySlug,
   type SubServiceSlug,
 } from "@/data/services";
@@ -28,6 +29,7 @@ export const HeroSearch = () => {
   const [dates, setDates] = useState<DateRange | undefined>();
   const [pets, setPets] = useState<Pet[]>([]);
   const [timeSlots, setTimeSlots] = useState<string[]>([]);
+  const [duration, setDuration] = useState<string | undefined>();
   const goToSearch = useGoToSearch();
 
   const activeCategory = useMemo(
@@ -51,7 +53,7 @@ export const HeroSearch = () => {
     setTimeSlots((prev) => (prev.includes(v) ? prev.filter((s) => s !== v) : [...prev, v]));
 
   const handleSearch = () => {
-    goToSearch({ category, subs: [sub], location, dates, pets, timeSlots });
+    goToSearch({ category, subs: [sub], location, dates, pets, timeSlots, duration });
   };
 
   return (
@@ -186,7 +188,7 @@ export const HeroSearch = () => {
               <div className="mt-3 px-2 animate-fade-in">
                 <div className="flex items-center justify-between gap-2 mb-2">
                   <Label className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground">
-                    Preferred time of day
+                    Preferred time &amp; duration
                   </Label>
                   <span className="text-[11px] text-muted-foreground/80 hidden sm:inline">
                     Filter for walkers, groomers, drop-ins, or day care during your preferred hours
@@ -214,6 +216,39 @@ export const HeroSearch = () => {
                       </button>
                     );
                   })}
+                </div>
+
+                {/* Duration (single-select) */}
+                <div className="mt-3">
+                  <div className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground mb-1.5">
+                    Duration
+                  </div>
+                  <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="Duration">
+                    {DURATIONS.map((d) => {
+                      const active = duration === d.value;
+                      return (
+                        <button
+                          key={d.value}
+                          type="button"
+                          role="radio"
+                          aria-checked={active}
+                          onClick={() => setDuration(active ? undefined : d.value)}
+                          className={cn(
+                            "px-3 py-1.5 rounded-full text-xs font-semibold border transition-colors",
+                            active
+                              ? "bg-accent text-accent-foreground border-accent"
+                              : "bg-background text-foreground border-border hover:bg-secondary",
+                          )}
+                        >
+                          {d.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <p className="mt-2 text-[11px] leading-relaxed text-muted-foreground max-w-2xl">
+                    Please select a realistic duration that covers the full service your pet needs
+                    (including travel/setup time). Short bookings may be declined or adjusted by providers.
+                  </p>
                 </div>
               </div>
             )}

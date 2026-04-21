@@ -19,6 +19,8 @@ import {
   SERVICE_CATEGORIES,
   TIME_SLOTS,
   TIME_SLOT_SERVICES,
+  DURATIONS,
+  formatDurationLabel,
   findSub,
   type SubServiceSlug,
 } from "@/data/services";
@@ -80,7 +82,7 @@ const Search = () => {
 
   const activeCategory = SERVICE_CATEGORIES.find((c) => c.slug === state.category) || SERVICE_CATEGORIES[0];
   const activeFilterCount =
-    state.subs.length + state.timeSlots.length + state.sizes.length + state.attrs.length;
+    state.subs.length + state.timeSlots.length + state.sizes.length + state.attrs.length + (state.duration ? 1 : 0);
 
   const FiltersPanel = (
     <div className="space-y-6">
@@ -186,6 +188,36 @@ const Search = () => {
               );
             })}
           </div>
+
+          {/* Duration (single-select) */}
+          <div className="mt-4">
+            <Label className="text-xs font-bold uppercase tracking-wide text-muted-foreground">Duration</Label>
+            <div className="mt-2 flex flex-wrap gap-2" role="radiogroup" aria-label="Duration">
+              {DURATIONS.map((d) => {
+                const active = state.duration === d.value;
+                return (
+                  <button
+                    key={d.value}
+                    role="radio"
+                    aria-checked={active}
+                    onClick={() => update({ duration: active ? undefined : d.value })}
+                    className={cn(
+                      "px-3 py-2 rounded-full text-xs font-semibold border transition-colors",
+                      active
+                        ? "bg-accent text-accent-foreground border-accent"
+                        : "bg-background text-foreground border-border hover:bg-secondary",
+                    )}
+                  >
+                    {d.label}
+                  </button>
+                );
+              })}
+            </div>
+            <p className="mt-2 text-[11px] leading-relaxed text-muted-foreground">
+              Please select a realistic duration that covers the full service your pet needs
+              (including travel/setup time). Short bookings may be declined or adjusted by providers.
+            </p>
+          </div>
         </div>
       )}
 
@@ -222,7 +254,7 @@ const Search = () => {
         <Button
           variant="ghost"
           className="w-full rounded-full text-muted-foreground"
-          onClick={() => update({ subs: [], timeSlots: [], sizes: [], attrs: [] })}
+          onClick={() => update({ subs: [], timeSlots: [], sizes: [], attrs: [], duration: undefined })}
         >
           <X className="h-4 w-4 mr-1" /> Clear all filters
         </Button>
@@ -338,7 +370,7 @@ const Search = () => {
                 </div>
               ) : (
                 filtered.map((s) => (
-                  <SitterCard key={s.id} sitter={s} active={hoveredId === s.id} onHover={setHoveredId} />
+                  <SitterCard key={s.id} sitter={s} active={hoveredId === s.id} onHover={setHoveredId} durationLabel={showTimeSlots ? formatDurationLabel(state.duration) : ""} subLabel={state.subs[0] ? findSub(state.subs[0])?.label : undefined} />
                 ))
               )}
             </div>
@@ -346,7 +378,7 @@ const Search = () => {
             <div className="grid md:grid-cols-2 gap-4 h-[70vh]">
               <div className="overflow-y-auto pr-1 space-y-3">
                 {filtered.map((s) => (
-                  <SitterCard key={s.id} sitter={s} active={hoveredId === s.id} onHover={setHoveredId} />
+                  <SitterCard key={s.id} sitter={s} active={hoveredId === s.id} onHover={setHoveredId} durationLabel={showTimeSlots ? formatDurationLabel(state.duration) : ""} subLabel={state.subs[0] ? findSub(state.subs[0])?.label : undefined} />
                 ))}
               </div>
               <div className="h-full min-h-[400px] rounded-2xl overflow-hidden border border-border">

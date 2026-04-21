@@ -7,10 +7,15 @@ interface SitterCardProps {
   sitter: Sitter;
   active?: boolean;
   onHover?: (id: string | null) => void;
+  durationLabel?: string;
+  subLabel?: string;
 }
 
-export const SitterCard = ({ sitter, active, onHover }: SitterCardProps) => {
+export const SitterCard = ({ sitter, active, onHover, durationLabel, subLabel }: SitterCardProps) => {
   const services = sitter.services.map((s) => findSub(s)?.label).filter(Boolean) as string[];
+  const durationBadge = durationLabel
+    ? `${durationLabel}${subLabel ? ` ${subLabel.toLowerCase()}` : ""}`
+    : "";
   return (
     <article
       onMouseEnter={() => onHover?.(sitter.id)}
@@ -50,6 +55,11 @@ export const SitterCard = ({ sitter, active, onHover }: SitterCardProps) => {
         <p className="mt-2 text-xs text-muted-foreground line-clamp-2">{sitter.bio}</p>
 
         <div className="mt-2 flex flex-wrap gap-1">
+          {durationBadge && (
+            <span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-semibold">
+              {durationBadge}
+            </span>
+          )}
           {services.slice(0, 3).map((s) => (
             <span key={s} className="px-2 py-0.5 rounded-full bg-secondary text-[10px] font-medium text-foreground/80">
               {s}

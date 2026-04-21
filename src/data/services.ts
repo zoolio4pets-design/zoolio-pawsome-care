@@ -141,6 +141,22 @@ export const TIME_SLOTS = [
   { value: "evening", label: "Evening", hours: "3pm – 10pm" },
 ] as const;
 
+// Duration options (single-select) for hourly-billed services.
+// Shown only when the selected sub-service is in TIME_SLOT_SERVICES.
+export const DURATIONS = [
+  { value: "30", label: "30 min", minutes: 30 },
+  { value: "60", label: "60 min", minutes: 60 },
+  { value: "90", label: "90 min", minutes: 90 },
+  { value: "120", label: "2 hrs", minutes: 120 },
+  { value: "180", label: "3 hrs", minutes: 180 },
+  { value: "240", label: "4+ hrs", minutes: 240 },
+] as const;
+
+export type DurationValue = (typeof DURATIONS)[number]["value"];
+
+export const formatDurationLabel = (v?: string) =>
+  DURATIONS.find((d) => d.value === v)?.label ?? "";
+
 export const ALL_SUBS: SubService[] = SERVICE_CATEGORIES.flatMap((c) => c.subs);
 
 export const findSub = (slug: string): SubService | undefined =>

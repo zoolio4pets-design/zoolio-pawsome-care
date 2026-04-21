@@ -14,6 +14,7 @@ export interface SearchState {
   timeSlots: string[];
   sizes: PetSize[];
   attrs: string[];
+  duration?: string;
 }
 
 const KNOWN_ATTRS = ["fencedYard", "nonSmoking", "noChildren", "noOtherPets", "acceptsPuppies", "acceptsSeniorDogs", "givesMedication"];
@@ -46,6 +47,7 @@ export function encodeSearchToParams(s: Partial<SearchState>): URLSearchParams {
   if (s.sizes?.length) p.set("sizes", s.sizes.join(","));
   if (s.attrs?.length) p.set("attrs", s.attrs.join(","));
   if (s.pets?.length) p.set("pets", String(s.pets.length));
+  if (s.duration) p.set("dur", s.duration);
   return p;
 }
 
@@ -76,6 +78,7 @@ export function useSearchState(): {
       timeSlots: params.get("slots")?.split(",").filter(Boolean) || [],
       sizes: (params.get("sizes")?.split(",").filter(Boolean) as PetSize[]) || [],
       attrs: params.get("attrs")?.split(",").filter(Boolean).filter((a) => KNOWN_ATTRS.includes(a)) || [],
+      duration: params.get("dur") || undefined,
     };
   }, [params]);
 
