@@ -21,6 +21,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
+  SelectGroup,
+  SelectLabel,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -29,17 +31,7 @@ import heroImage from "@/assets/hero-pets.jpg";
 import heroVideo from "@/assets/hero-pets.mp4.asset.json";
 import { useGoToSearch } from "@/lib/search-state";
 import type { CategorySlug, SubServiceSlug } from "@/data/services";
-import { categoryForSub } from "@/data/services";
-
-const SERVICE_OPTIONS: { value: SubServiceSlug; label: string }[] = [
-  { value: "boarding", label: "Boarding" },
-  { value: "house-sitting", label: "House Sitting" },
-  { value: "day-care", label: "Day Care" },
-  { value: "dog-walking", label: "Dog Walking" },
-  { value: "drop-in-visits", label: "Drop-In Visits" },
-  { value: "wellness-grooming", label: "Grooming" },
-  { value: "reptile-exotic", label: "Exotic/Aquatic Care" },
-];
+import { categoryForSub, SERVICE_CATEGORIES } from "@/data/services";
 
 const PET_OPTIONS = [
   { value: "large-dog", label: "Large Dog", icon: Dog },
@@ -119,11 +111,18 @@ export const HeroSearch = () => {
                   <SelectTrigger className="mt-1 h-12 rounded-xl border-border bg-background">
                     <SelectValue placeholder="Select a service" />
                   </SelectTrigger>
-                  <SelectContent>
-                    {SERVICE_OPTIONS.map((s) => (
-                      <SelectItem key={s.value} value={s.value}>
-                        {s.label}
-                      </SelectItem>
+                  <SelectContent className="max-h-[420px]">
+                    {SERVICE_CATEGORIES.map((cat) => (
+                      <SelectGroup key={cat.slug}>
+                        <SelectLabel className="text-[11px] font-bold uppercase tracking-wider text-primary">
+                          {cat.slug === "other" ? "Specialized Care" : cat.label}
+                        </SelectLabel>
+                        {cat.subs.map((s) => (
+                          <SelectItem key={s.slug} value={s.slug} className="pl-6">
+                            {s.label}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
                     ))}
                   </SelectContent>
                 </Select>
