@@ -1,145 +1,118 @@
-import { useState } from "react";
-import { ArrowRight, Sun, Moon, Sparkles, LayoutGrid } from "lucide-react";
-import { SERVICE_CATEGORIES, categoryForSub, type CategorySlug, type SubService } from "@/data/services";
+import {
+  Sparkles,
+  Footprints,
+  Home,
+  Scissors,
+  Camera,
+  Bed,
+  KeyRound,
+  Fish,
+  PawPrint,
+  Bird,
+  Sun,
+  Moon,
+  Star,
+  type LucideIcon,
+} from "lucide-react";
 import { useGoToSearch } from "@/lib/search-state";
-import { cn } from "@/lib/utils";
-import boarding from "@/assets/service-boarding.jpg";
-import walking from "@/assets/service-walking.jpg";
-import dropin from "@/assets/service-dropin.jpg";
-import daycare from "@/assets/service-daycare.jpg";
-import grooming from "@/assets/service-grooming.jpg";
-import events from "@/assets/service-events.jpg";
-import housesitting from "@/assets/service-housesitting.jpg";
-import aquatic from "@/assets/service-aquatic.jpg";
-import reptile from "@/assets/service-reptile.jpg";
-import smallanimal from "@/assets/service-smallanimal.jpg";
+import { categoryForSub, type CategorySlug, type SubServiceSlug } from "@/data/services";
 
-const SUB_IMAGE: Record<string, string> = {
-  "day-care": daycare,
-  "digital-events": events,
-  "dog-walking": walking,
-  "drop-in-visits": dropin,
-  "wellness-grooming": grooming,
-  "boarding": boarding,
-  "house-sitting": housesitting,
-  "aquatic": aquatic,
-  "reptile-exotic": reptile,
-  "small-animal-bird": smallanimal,
+type ServiceItem = {
+  slug: SubServiceSlug;
+  label: string;
+  desc: string;
+  icon: LucideIcon;
 };
 
-type TabValue = CategorySlug | "all";
+type Group = {
+  title: string;
+  icon: LucideIcon;
+  items: ServiceItem[];
+};
 
-const TABS: { value: TabValue; label: string; icon: typeof Sun }[] = [
-  { value: "daytime", label: "Daytime Care", icon: Sun },
-  { value: "overnight", label: "Overnight Care", icon: Moon },
-  { value: "other", label: "Other Services", icon: Sparkles },
-  { value: "all", label: "All services", icon: LayoutGrid },
+const GROUPS: Group[] = [
+  {
+    title: "Daytime Care",
+    icon: Sun,
+    items: [
+      { slug: "day-care", label: "Day Care", desc: "Playtime in a sitter's home or facility.", icon: Sparkles },
+      { slug: "dog-walking", label: "Dog Walking", desc: "Neighbourhood walks full of fresh air.", icon: Footprints },
+      { slug: "drop-in-visits", label: "Drop-In Visits", desc: "Quick visits for meals and potty breaks.", icon: Home },
+      { slug: "wellness-grooming", label: "Health, Wellness & Grooming", desc: "Pampering, nail trims and wellness care.", icon: Scissors },
+      { slug: "digital-events", label: "Digital & Event Services", desc: "Paw-ties and pet photoshoots.", icon: Camera },
+    ],
+  },
+  {
+    title: "Overnight Care",
+    icon: Moon,
+    items: [
+      { slug: "boarding", label: "Boarding", desc: "Cozy overnight stays in a sitter's home.", icon: Bed },
+      { slug: "house-sitting", label: "Pet & House Sitting", desc: "A trusted sitter stays in your home.", icon: KeyRound },
+    ],
+  },
+  {
+    title: "Specialized Care",
+    icon: Star,
+    items: [
+      { slug: "aquatic", label: "Aquarium & Aquatic Services", desc: "Expert care for fish and aquariums.", icon: Fish },
+      { slug: "reptile-exotic", label: "Reptile & Exotic Pet Care", desc: "Specialised care for reptiles and exotics.", icon: PawPrint },
+      { slug: "small-animal-bird", label: "Small Animal & Bird Care", desc: "Gentle care for birds and small pets.", icon: Bird },
+    ],
+  },
 ];
 
 export const Services = () => {
   const goToSearch = useGoToSearch();
-  const [active, setActive] = useState<TabValue>("daytime");
-
-  const visibleSubs: { sub: SubService; categorySlug: CategorySlug }[] =
-    active === "all"
-      ? SERVICE_CATEGORIES.flatMap((c) => c.subs.map((sub) => ({ sub, categorySlug: c.slug })))
-      : (SERVICE_CATEGORIES.find((c) => c.slug === active)?.subs ?? []).map((sub) => ({
-          sub,
-          categorySlug: active as CategorySlug,
-        }));
 
   return (
     <section id="services" className="py-20 md:py-28 bg-background">
       <div className="container-zoolio">
-        {/* Header */}
-        <div className="max-w-3xl mb-10 md:mb-14">
+        <div className="max-w-3xl mx-auto text-center mb-14 md:mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-foreground tracking-tight">
-            Get to know services on Zoolio
+            Services for Every Pet
           </h2>
           <p className="mt-4 text-lg md:text-xl text-muted-foreground">
-            Get the care your pet needs, anytime and anywhere in South Africa.
+            From wagging tails to scaly friends — find the perfect care across South Africa.
           </p>
         </div>
 
-        {/* Tabs */}
-        <div
-          role="tablist"
-          aria-label="Service categories"
-          className="flex flex-wrap gap-2 md:gap-3 mb-10 md:mb-14"
-        >
-          {TABS.map((t) => {
-            const Icon = t.icon;
-            const isActive = active === t.value;
+        <div className="space-y-14 md:space-y-20">
+          {GROUPS.map((group) => {
+            const GroupIcon = group.icon;
             return (
-              <button
-                key={t.value}
-                role="tab"
-                aria-selected={isActive}
-                onClick={() => setActive(t.value)}
-                className={cn(
-                  "inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm md:text-base font-semibold border transition-all",
-                  isActive
-                    ? "bg-foreground text-background border-foreground shadow-soft"
-                    : "bg-background text-foreground border-border hover:border-foreground/40 hover:bg-muted"
-                )}
-              >
-                <Icon className="h-4 w-4" />
-                {t.label}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Cards (stacked) */}
-        <div className="space-y-6 md:space-y-8">
-          {visibleSubs.map(({ sub, categorySlug }) => (
-            <article
-              key={sub.slug}
-              className="group bg-card rounded-3xl border border-border/60 overflow-hidden shadow-soft hover:shadow-card transition-all"
-            >
-              <div className="grid md:grid-cols-12 gap-0">
-                <div className="md:col-span-5 lg:col-span-5 relative overflow-hidden">
-                  <div className="aspect-[4/3] md:aspect-auto md:h-full">
-                    <img
-                      src={SUB_IMAGE[sub.slug]}
-                      alt={`${sub.label} on Zoolio`}
-                      loading="lazy"
-                      width={1280}
-                      height={896}
-                      className="h-full w-full object-cover group-hover:scale-[1.03] transition-transform duration-700 ease-out"
-                    />
-                  </div>
+              <div key={group.title}>
+                <div className="flex items-center gap-3 mb-6 md:mb-8">
+                  <span className="grid h-10 w-10 place-items-center rounded-full bg-primary/10 text-primary">
+                    <GroupIcon className="h-5 w-5" />
+                  </span>
+                  <h3 className="text-2xl md:text-3xl font-bold tracking-tight">{group.title}</h3>
                 </div>
 
-                <div className="md:col-span-7 lg:col-span-7 p-6 md:p-10 flex flex-col justify-between">
-                  <div>
-                    <h3 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight">
-                      {sub.label}
-                    </h3>
-                    <p className="mt-2 text-sm font-medium text-primary">
-                      {sub.shortDesc}
-                    </p>
-                    <p className="mt-5 text-base md:text-lg text-foreground/80 leading-relaxed">
-                      {sub.blurb}
-                    </p>
-                  </div>
-
-                  <div className="mt-8 flex justify-end">
-                    <button
-                      onClick={() => {
-                        const c = categoryForSub(sub.slug) ?? { slug: categorySlug };
-                        goToSearch({ category: c.slug as CategorySlug, subs: [sub.slug] });
-                      }}
-                      className="inline-flex items-center gap-2 rounded-full bg-foreground text-background px-5 py-2.5 text-sm font-semibold hover:bg-foreground/90 transition-all hover:gap-3"
-                    >
-                      Explore {sub.label}
-                      <ArrowRight className="h-4 w-4" />
-                    </button>
-                  </div>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                  {group.items.map((item) => {
+                    const Icon = item.icon;
+                    return (
+                      <button
+                        key={item.slug}
+                        type="button"
+                        onClick={() => {
+                          const c = categoryForSub(item.slug);
+                          goToSearch({ category: (c?.slug ?? "daytime") as CategorySlug, subs: [item.slug] });
+                        }}
+                        className="group text-left bg-card rounded-2xl border border-border/60 p-6 hover:border-primary/40 hover:shadow-card transition-all"
+                      >
+                        <span className="grid h-12 w-12 place-items-center rounded-xl bg-secondary text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                          <Icon className="h-6 w-6" />
+                        </span>
+                        <h4 className="mt-5 text-lg font-bold text-foreground">{item.label}</h4>
+                        <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
-            </article>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

@@ -1,9 +1,7 @@
 import { Header } from "@/components/zoolio/Header";
 import { HeroSearch } from "@/components/zoolio/HeroSearch";
 import { Services } from "@/components/zoolio/Services";
-import { HowItWorks } from "@/components/zoolio/HowItWorks";
 import { TrustSafety } from "@/components/zoolio/TrustSafety";
-import { Testimonials } from "@/components/zoolio/Testimonials";
 import { BecomeSitter } from "@/components/zoolio/BecomeSitter";
 import { Footer } from "@/components/zoolio/Footer";
 import { useEffect } from "react";
@@ -22,9 +20,7 @@ const Index = () => {
       <Header />
       <HeroSearch />
       <Services />
-      <HowItWorks />
       <TrustSafety />
-      <Testimonials />
       <BecomeSitter />
       <Footer />
     </main>
