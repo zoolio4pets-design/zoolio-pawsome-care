@@ -1,118 +1,164 @@
-import {
-  Sparkles,
-  Footprints,
-  Home,
-  Scissors,
-  Camera,
-  Bed,
-  KeyRound,
-  Fish,
-  PawPrint,
-  Bird,
-  Sun,
-  Moon,
-  Star,
-  type LucideIcon,
-} from "lucide-react";
+import { useState } from "react";
+import { Sun, Moon, Star } from "lucide-react";
 import { useGoToSearch } from "@/lib/search-state";
-import { categoryForSub, type CategorySlug, type SubServiceSlug } from "@/data/services";
+import {
+  SERVICE_CATEGORIES,
+  type CategorySlug,
+  type SubServiceSlug,
+} from "@/data/services";
+import { cn } from "@/lib/utils";
 
-type ServiceItem = {
-  slug: SubServiceSlug;
-  label: string;
-  desc: string;
-  icon: LucideIcon;
+import dayCareImg from "@/assets/services/day-care.jpg";
+import dogWalkingImg from "@/assets/services/dog-walking.jpg";
+import dropInImg from "@/assets/services/drop-in.jpg";
+import digitalEventsImg from "@/assets/services/digital-events.jpg";
+import groomingImg from "@/assets/services/grooming.jpg";
+import boardingImg from "@/assets/services/boarding.jpg";
+import houseSittingImg from "@/assets/services/house-sitting.jpg";
+import aquaticImg from "@/assets/services/aquatic.jpg";
+import reptileImg from "@/assets/services/reptile.jpg";
+import smallAnimalImg from "@/assets/services/small-animal.jpg";
+
+const SUB_IMAGES: Record<SubServiceSlug, string> = {
+  "day-care": dayCareImg,
+  "dog-walking": dogWalkingImg,
+  "drop-in-visits": dropInImg,
+  "digital-events": digitalEventsImg,
+  "wellness-grooming": groomingImg,
+  boarding: boardingImg,
+  "house-sitting": houseSittingImg,
+  aquatic: aquaticImg,
+  "reptile-exotic": reptileImg,
+  "small-animal-bird": smallAnimalImg,
 };
 
-type Group = {
-  title: string;
-  icon: LucideIcon;
-  items: ServiceItem[];
+// Card-specific copy (concise, per spec)
+const CARD_DESC: Partial<Record<SubServiceSlug, string>> = {
+  "day-care":
+    "Give your dog playtime in a fun, safe environment while you're away. Choose between a trusted sitter's home or a local day care centre.",
+  "dog-walking":
+    "Unleash the excitement with action-packed neighbourhood adventures! Give your energetic pup the ultimate workout—full of fresh air, joyful sniffs, and boundless exploration.",
+  "drop-in-visits":
+    "Perfect for cats and independent pups who just need a sitter to drop by. Your pets get potty breaks, clean litter boxes, playtime, and meals.",
+  "digital-events":
+    "From glamorous paw-ty planning to perfect photography, treat your fur-babies like the true celebs.",
+  "wellness-grooming":
+    "From grooming and nail trims to wellness and fitness care—all the pampering, minus the vet visit.",
+  boarding:
+    "A thrilling sleepover adventure! Your pet gets VIP treatment in a trusted sitter's cozy home—packed with snuggles and personalized fun.",
+  "house-sitting":
+    "Travel stress-free. Book a trusted sitter to stay in your home and keep your pets in their usual routine.",
+  aquatic:
+    "Crystal-clear tanks and happy fins. Expert care for aquariums, ponds, and aquatic pets.",
+  "reptile-exotic":
+    "Specialized care for reptiles, amphibians, and exotic pets that need a little extra know-how.",
+  "small-animal-bird":
+    "Gentle, knowledgeable care for birds and small pets like rabbits, guinea pigs, and hamsters.",
 };
 
-const GROUPS: Group[] = [
-  {
-    title: "Daytime Care",
-    icon: Sun,
-    items: [
-      { slug: "day-care", label: "Day Care", desc: "Playtime in a sitter's home or facility.", icon: Sparkles },
-      { slug: "dog-walking", label: "Dog Walking", desc: "Neighbourhood walks full of fresh air.", icon: Footprints },
-      { slug: "drop-in-visits", label: "Drop-In Visits", desc: "Quick visits for meals and potty breaks.", icon: Home },
-      { slug: "wellness-grooming", label: "Health, Wellness & Grooming", desc: "Pampering, nail trims and wellness care.", icon: Scissors },
-      { slug: "digital-events", label: "Digital & Event Services", desc: "Paw-ties and pet photoshoots.", icon: Camera },
-    ],
-  },
-  {
-    title: "Overnight Care",
-    icon: Moon,
-    items: [
-      { slug: "boarding", label: "Boarding", desc: "Cozy overnight stays in a sitter's home.", icon: Bed },
-      { slug: "house-sitting", label: "Pet & House Sitting", desc: "A trusted sitter stays in your home.", icon: KeyRound },
-    ],
-  },
-  {
-    title: "Specialized Care",
-    icon: Star,
-    items: [
-      { slug: "aquatic", label: "Aquarium & Aquatic Services", desc: "Expert care for fish and aquariums.", icon: Fish },
-      { slug: "reptile-exotic", label: "Reptile & Exotic Pet Care", desc: "Specialised care for reptiles and exotics.", icon: PawPrint },
-      { slug: "small-animal-bird", label: "Small Animal & Bird Care", desc: "Gentle care for birds and small pets.", icon: Bird },
-    ],
-  },
-];
+const CATEGORY_LABEL: Record<CategorySlug, string> = {
+  daytime: "Daytime Care",
+  overnight: "Overnight Care",
+  other: "Specialized Care",
+};
+
+const CATEGORY_ICON: Record<CategorySlug, typeof Sun> = {
+  daytime: Sun,
+  overnight: Moon,
+  other: Star,
+};
+
+const CATEGORY_ORDER: CategorySlug[] = ["daytime", "overnight", "other"];
 
 export const Services = () => {
   const goToSearch = useGoToSearch();
+  const [activeCat, setActiveCat] = useState<CategorySlug>("daytime");
+
+  const category = SERVICE_CATEGORIES.find((c) => c.slug === activeCat)!;
 
   return (
     <section id="services" className="py-20 md:py-28 bg-background">
       <div className="container-zoolio">
-        <div className="max-w-3xl mx-auto text-center mb-14 md:mb-16">
+        <div className="max-w-3xl mx-auto text-center mb-10 md:mb-12">
           <h2 className="text-4xl md:text-5xl font-bold text-foreground tracking-tight">
             Services for Every Pet
           </h2>
           <p className="mt-4 text-lg md:text-xl text-muted-foreground">
-            From wagging tails to scaly friends — find the perfect care across South Africa.
+            Book trusted pet care across South Africa—for paws, scales, and tails.
           </p>
         </div>
 
-        <div className="space-y-14 md:space-y-20">
-          {GROUPS.map((group) => {
-            const GroupIcon = group.icon;
+        {/* Chips */}
+        <div
+          role="tablist"
+          aria-label="Service categories"
+          className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-10 md:mb-14"
+        >
+          {CATEGORY_ORDER.map((slug) => {
+            const Icon = CATEGORY_ICON[slug];
+            const isActive = activeCat === slug;
             return (
-              <div key={group.title}>
-                <div className="flex items-center gap-3 mb-6 md:mb-8">
-                  <span className="grid h-10 w-10 place-items-center rounded-full bg-primary/10 text-primary">
-                    <GroupIcon className="h-5 w-5" />
-                  </span>
-                  <h3 className="text-2xl md:text-3xl font-bold tracking-tight">{group.title}</h3>
-                </div>
-
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                  {group.items.map((item) => {
-                    const Icon = item.icon;
-                    return (
-                      <button
-                        key={item.slug}
-                        type="button"
-                        onClick={() => {
-                          const c = categoryForSub(item.slug);
-                          goToSearch({ category: (c?.slug ?? "daytime") as CategorySlug, subs: [item.slug] });
-                        }}
-                        className="group text-left bg-card rounded-2xl border border-border/60 p-6 hover:border-primary/40 hover:shadow-card transition-all"
-                      >
-                        <span className="grid h-12 w-12 place-items-center rounded-xl bg-secondary text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                          <Icon className="h-6 w-6" />
-                        </span>
-                        <h4 className="mt-5 text-lg font-bold text-foreground">{item.label}</h4>
-                        <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
+              <button
+                key={slug}
+                role="tab"
+                aria-selected={isActive}
+                onClick={() => setActiveCat(slug)}
+                className={cn(
+                  "inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm md:text-base font-semibold transition-all duration-300 border",
+                  isActive
+                    ? "bg-primary text-primary-foreground border-primary shadow-cta scale-[1.02]"
+                    : "bg-background text-foreground/80 border-border hover:border-primary/50 hover:text-primary",
+                )}
+              >
+                <Icon className="h-4 w-4" />
+                {CATEGORY_LABEL[slug]}
+              </button>
             );
           })}
+        </div>
+
+        {/* Description */}
+        <div
+          key={`desc-${activeCat}`}
+          className="max-w-3xl mx-auto text-center mb-10 md:mb-14 animate-fade-in"
+        >
+          <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
+            {category.intro}
+          </p>
+        </div>
+
+        {/* Cards */}
+        <div
+          key={`grid-${activeCat}`}
+          className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-7 animate-fade-up"
+        >
+          {category.subs.map((sub) => (
+            <button
+              key={sub.slug}
+              type="button"
+              onClick={() =>
+                goToSearch({ category: activeCat, subs: [sub.slug] })
+              }
+              className="group text-left bg-card rounded-2xl border border-border/60 overflow-hidden hover:border-primary/40 hover:shadow-card transition-all duration-300"
+            >
+              <div className="aspect-[4/3] overflow-hidden bg-muted">
+                <img
+                  src={SUB_IMAGES[sub.slug]}
+                  alt={sub.label}
+                  loading="lazy"
+                  width={800}
+                  height={600}
+                  className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+              <div className="p-5 md:p-6">
+                <h4 className="text-lg font-bold text-foreground">{sub.label}</h4>
+                <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+                  {CARD_DESC[sub.slug] ?? sub.blurb}
+                </p>
+              </div>
+            </button>
+          ))}
         </div>
       </div>
     </section>
