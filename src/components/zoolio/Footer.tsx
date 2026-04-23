@@ -1,17 +1,16 @@
 import { PawPrint, Instagram, Facebook, Twitter } from "lucide-react";
 
 const cols = [
-  { title: "Services", links: ["Dog Boarding", "House Sitting", "Drop-In Visits", "Dog Walking", "Doggy Day Care", "Dog Training"] },
-  { title: "Cities", links: ["Cape Town", "Johannesburg", "Durban", "Pretoria", "Stellenbosch", "Port Elizabeth"] },
-  { title: "Company", links: ["About Zoolio"] },
-  { title: "Legal", links: ["Terms", "Privacy", "Cookie Settings"] },
+  { title: "Services", links: ["Boarding", "House Sitting", "Day Care", "Dog Walking", "Drop-In Visits", "Grooming"] },
+  { title: "Company", links: ["About Us", "FAQ"] },
+  { title: "Legal", links: ["Terms", "Privacy Policy"] },
 ];
 
 export const Footer = () => (
   <footer className="bg-foreground text-background pt-20 pb-10">
     <div className="container-zoolio">
       <div className="grid lg:grid-cols-6 gap-10">
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-3">
           <a href="/" className="flex items-center gap-2 font-display text-2xl font-bold">
             <span className="grid h-9 w-9 place-items-center rounded-full bg-accent text-accent-foreground">
               <PawPrint className="h-5 w-5" />
@@ -44,13 +43,8 @@ export const Footer = () => (
         ))}
       </div>
 
-      <div className="mt-16 pt-8 border-t border-background/10 flex flex-col md:flex-row justify-between gap-4 text-xs text-background/60">
-        <div>© {new Date().getFullYear()} Zoolio (Pty) Ltd. Made with ♥ in South Africa. Prices in ZAR.</div>
-        <div className="flex gap-6">
-          <a href="#" className="hover:text-accent">Sitemap</a>
-          <a href="#" className="hover:text-accent">Accessibility</a>
-          <a href="#" className="hover:text-accent">POPIA</a>
-        </div>
+      <div className="mt-16 pt-8 border-t border-background/10 text-center text-xs text-background/60">
+        © 2026 with ♥ by Zoolio
       </div>
     </div>
   </footer>
