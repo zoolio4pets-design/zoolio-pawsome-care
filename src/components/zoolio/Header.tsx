@@ -1,11 +1,38 @@
 import { useEffect, useState } from "react";
-import { Menu, PawPrint, X } from "lucide-react";
+import {
+  Menu,
+  PawPrint,
+  X,
+  ChevronDown,
+  Bed,
+  KeyRound,
+  Sparkles,
+  Footprints,
+  Home,
+  Scissors,
+  Fish,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const links = [
-  { label: "Find Care", href: "#services" },
-  { label: "Become a Sitter", href: "#become-sitter" },
-  { label: "Dog Training", href: "#training" },
+  { label: "Search Providers", href: "#services" },
+  { label: "Become a Provider", href: "#become-sitter" },
+];
+
+const serviceLinks = [
+  { label: "Boarding", icon: Bed },
+  { label: "House Sitting", icon: KeyRound },
+  { label: "Day Care", icon: Sparkles },
+  { label: "Dog Walking", icon: Footprints },
+  { label: "Drop-In Visits", icon: Home },
+  { label: "Grooming", icon: Scissors },
+  { label: "Exotic/Aquatic Care", icon: Fish },
 ];
 
 export const Header = () => {
@@ -45,11 +72,25 @@ export const Header = () => {
               {l.label}
             </a>
           ))}
+          <DropdownMenu>
+            <DropdownMenuTrigger className="inline-flex items-center gap-1 px-4 py-2 text-sm font-medium text-foreground/80 hover:text-primary rounded-full hover:bg-secondary transition-colors outline-none">
+              Provider Services <ChevronDown className="h-4 w-4" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56 rounded-2xl">
+              {serviceLinks.map((s) => (
+                <DropdownMenuItem key={s.label} asChild className="rounded-xl">
+                  <a href="#services" className="flex items-center gap-2 cursor-pointer">
+                    <s.icon className="h-4 w-4 text-primary" />
+                    {s.label}
+                  </a>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </nav>
 
         <div className="hidden lg:flex items-center gap-2">
-          <Button variant="ghost" className="rounded-full font-medium">Sign in</Button>
-          <Button className="rounded-full bg-primary hover:bg-primary/90 font-medium">Sign up</Button>
+          <Button className="rounded-full bg-primary hover:bg-primary/90 font-medium px-5">Login / Sign Up</Button>
         </div>
 
         <button
@@ -74,9 +115,22 @@ export const Header = () => {
                 {l.label}
               </a>
             ))}
+            <div className="px-3 pt-3 pb-1 text-xs font-bold uppercase tracking-wide text-muted-foreground">
+              Provider Services
+            </div>
+            {serviceLinks.map((s) => (
+              <a
+                key={s.label}
+                href="#services"
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg hover:bg-secondary"
+              >
+                <s.icon className="h-4 w-4 text-primary" />
+                {s.label}
+              </a>
+            ))}
             <div className="flex gap-2 pt-3">
-              <Button variant="outline" className="flex-1 rounded-full">Sign in</Button>
-              <Button className="flex-1 rounded-full bg-primary">Sign up</Button>
+              <Button className="flex-1 rounded-full bg-primary">Login / Sign Up</Button>
             </div>
           </div>
         </div>
