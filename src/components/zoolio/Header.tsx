@@ -11,6 +11,12 @@ import {
   Home,
   Scissors,
   Fish,
+  Camera,
+  PawPrint as PawIcon,
+  Bird,
+  Sun,
+  Moon,
+  Star,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,6 +24,8 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 
 const links = [
@@ -25,14 +33,41 @@ const links = [
   { label: "Become a Provider", href: "#become-sitter" },
 ];
 
-const serviceLinks = [
-  { label: "Boarding", icon: Bed },
-  { label: "House Sitting", icon: KeyRound },
-  { label: "Day Care", icon: Sparkles },
-  { label: "Dog Walking", icon: Footprints },
-  { label: "Drop-In Visits", icon: Home },
-  { label: "Grooming", icon: Scissors },
-  { label: "Exotic/Aquatic Care", icon: Fish },
+type ServiceGroup = {
+  title: string;
+  icon: typeof Sun;
+  items: { label: string; icon: typeof Bed }[];
+};
+
+const serviceGroups: ServiceGroup[] = [
+  {
+    title: "Daytime Care",
+    icon: Sun,
+    items: [
+      { label: "Day Care", icon: Sparkles },
+      { label: "Dog Walking", icon: Footprints },
+      { label: "Drop-In Visits", icon: Home },
+      { label: "Health, Wellness & Grooming", icon: Scissors },
+      { label: "Digital & Event Services", icon: Camera },
+    ],
+  },
+  {
+    title: "Overnight Care",
+    icon: Moon,
+    items: [
+      { label: "Boarding (in sitter's home)", icon: Bed },
+      { label: "Pet & House Sitting (in your home)", icon: KeyRound },
+    ],
+  },
+  {
+    title: "Specialized Care",
+    icon: Star,
+    items: [
+      { label: "Aquarium & Aquatic Services", icon: Fish },
+      { label: "Reptile & Exotic Pet Care", icon: PawIcon },
+      { label: "Small Animal & Bird Care", icon: Bird },
+    ],
+  },
 ];
 
 export const Header = () => {
