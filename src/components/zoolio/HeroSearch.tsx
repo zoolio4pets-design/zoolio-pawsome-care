@@ -1,145 +1,82 @@
-import { useEffect, useMemo, useState } from "react";
-import { addDays, format } from "date-fns";
+import { useState } from "react";
+import { format } from "date-fns";
 import {
   CalendarIcon,
+  PawPrint,
+  Search,
   ChevronDown,
-  Footprints,
-  Home,
-  Scissors,
-  Sparkles,
-  Camera,
-  Bed,
-  KeyRound,
+  Dog,
+  Cat,
   Fish,
   Bird,
   Rabbit,
-  PawPrint,
-  Search,
-  SlidersHorizontal,
-  Users,
-  X,
+  Bug,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import type { DateRange } from "react-day-picker";
 import heroImage from "@/assets/hero-pets.jpg";
 import heroVideo from "@/assets/hero-pets.mp4.asset.json";
-import {
-  SERVICE_CATEGORIES,
-  TIME_SLOTS,
-  TIME_SLOT_SERVICES,
-  HERO_DURATIONS,
-  type CategorySlug,
-  type SubServiceSlug,
-} from "@/data/services";
-import { POPULAR_LOCATIONS } from "@/data/locations";
-import { LocationCombobox } from "./LocationCombobox";
-import { PetDetailsModal, type Pet } from "./PetDetailsModal";
 import { useGoToSearch } from "@/lib/search-state";
-import { SITTERS } from "@/data/sitters";
+import type { CategorySlug, SubServiceSlug } from "@/data/services";
+import { categoryForSub } from "@/data/services";
 
-// Small icon per sub-service (Rover-style visual cues on chips).
-const SUB_ICONS: Record<SubServiceSlug, typeof PawPrint> = {
-  "dog-walking": Footprints,
-  "drop-in-visits": Home,
-  "wellness-grooming": Scissors,
-  "day-care": Sparkles,
-  "digital-events": Camera,
-  "boarding": Bed,
-  "house-sitting": KeyRound,
-  "aquatic": Fish,
-  "reptile-exotic": PawPrint,
-  "small-animal-bird": Bird,
-};
+const SERVICE_OPTIONS: { value: SubServiceSlug; label: string }[] = [
+  { value: "boarding", label: "Boarding" },
+  { value: "house-sitting", label: "House Sitting" },
+  { value: "day-care", label: "Day Care" },
+  { value: "dog-walking", label: "Dog Walking" },
+  { value: "drop-in-visits", label: "Drop-In Visits" },
+  { value: "wellness-grooming", label: "Grooming" },
+  { value: "reptile-exotic", label: "Exotic/Aquatic Care" },
+];
+
+const PET_OPTIONS = [
+  { value: "large-dog", label: "Large Dog", icon: Dog },
+  { value: "small-dog", label: "Small Dog", icon: Dog },
+  { value: "cat", label: "Cat", icon: Cat },
+  { value: "small-animal", label: "Small Animal", icon: Rabbit },
+  { value: "reptile", label: "Reptile", icon: Bug },
+  { value: "fish", label: "Fish", icon: Fish },
+] as const;
+
+const HOURS = Array.from({ length: 15 }, (_, i) => {
+  const h = i + 7; // 07:00 – 21:00
+  return { value: `${String(h).padStart(2, "0")}:00`, label: `${((h + 11) % 12) + 1}:00 ${h < 12 ? "AM" : "PM"}` };
+});
 
 export const HeroSearch = () => {
-  const [category, setCategory] = useState<CategorySlug>("daytime");
   const [sub, setSub] = useState<SubServiceSlug>("dog-walking");
+  const [petType, setPetType] = useState<string>("large-dog");
   const [location, setLocation] = useState("");
   const [dates, setDates] = useState<DateRange | undefined>();
-  const [pets, setPets] = useState<Pet[]>([]);
-  const [timeSlots, setTimeSlots] = useState<string[]>([]);
-  const [duration, setDuration] = useState<string | undefined>();
+  const [startTime, setStartTime] = useState<string | undefined>();
+  const [endTime, setEndTime] = useState<string | undefined>();
   const goToSearch = useGoToSearch();
 
-  const activeCategory = useMemo(
-    () => SERVICE_CATEGORIES.find((c) => c.slug === category)!,
-    [category],
-  );
-
-  const showTimeSlots = useMemo(
-    () => TIME_SLOT_SERVICES.has(sub),
-    [sub],
-  );
-
-  // When category changes, ensure selected sub belongs to it.
-  useEffect(() => {
-    setSub((prev) =>
-      activeCategory.subs.some((s) => s.slug === prev) ? prev : activeCategory.subs[0].slug,
-    );
-  }, [activeCategory]);
-
-  const toggleSlot = (v: string) =>
-    setTimeSlots((prev) => (prev.includes(v) ? prev.filter((s) => s !== v) : [...prev, v]));
-
   const handleSearch = () => {
-    goToSearch({ category, subs: [sub], location, dates, pets, timeSlots, duration });
-  };
-
-  const clearAll = () => {
-    setLocation("");
-    setDates(undefined);
-    setPets([]);
-    setTimeSlots([]);
-    setDuration(undefined);
-  };
-
-  const hasAnyFilter =
-    !!location || !!dates?.from || pets.length > 0 || timeSlots.length > 0 || !!duration;
-
-  // Live "X providers match" counter against the mock dataset.
-  const matchCount = useMemo(() => {
-    return SITTERS.filter((s) => {
-      if (!s.services.includes(sub)) return false;
-      if (location && !`${s.suburb} ${s.city}`.toLowerCase().includes(location.toLowerCase()))
-        return false;
-      if (timeSlots.length && !timeSlots.some((t) => s.availableTimeSlots.includes(t as never)))
-        return false;
-      return true;
-    }).length;
-  }, [sub, location, timeSlots]);
-
-  // Quick presets — one-tap fills date + slot + duration + sub.
-  const applyPreset = (preset: "walk-today" | "dropin-evening" | "daycare-tomorrow") => {
-    const today = new Date();
-    if (preset === "walk-today") {
-      setCategory("daytime");
-      setSub("dog-walking");
-      setDates({ from: today, to: today });
-      setTimeSlots(["midday"]);
-      setDuration("60");
-    } else if (preset === "dropin-evening") {
-      setCategory("daytime");
-      setSub("drop-in-visits");
-      setDates({ from: today, to: today });
-      setTimeSlots(["evening"]);
-      setDuration("30");
-    } else {
-      setCategory("daytime");
-      setSub("day-care");
-      const t = addDays(today, 1);
-      setDates({ from: t, to: t });
-      setTimeSlots(["morning", "midday", "evening"]);
-      setDuration("240");
-    }
+    const c = categoryForSub(sub);
+    goToSearch({
+      category: (c?.slug ?? "daytime") as CategorySlug,
+      subs: [sub],
+      location,
+      dates,
+    });
   };
 
   return (
     <section className="relative isolate overflow-hidden">
-      {/* Background video */}
+      {/* Background video (kept as-is) */}
       <div className="absolute inset-0 -z-10">
         <video
           src={heroVideo.url}
@@ -170,252 +107,144 @@ export const HeroSearch = () => {
         </div>
 
         {/* Search card */}
-        <div className="mt-10 md:mt-14 max-w-5xl">
-          {/* Quick preset pills */}
-          <div className="mb-3 flex flex-wrap items-center gap-2 animate-fade-up">
-            <span className="text-xs font-semibold text-background/90 drop-shadow mr-1">Quick start:</span>
-            <button
-              type="button"
-              onClick={() => applyPreset("walk-today")}
-              className="inline-flex items-center gap-1.5 rounded-full bg-background/90 backdrop-blur px-3 py-1.5 text-xs font-semibold text-foreground border border-border hover:bg-background transition-colors"
-            >
-              <Footprints className="h-3.5 w-3.5 text-primary" /> 60-min walk today
-            </button>
-            <button
-              type="button"
-              onClick={() => applyPreset("dropin-evening")}
-              className="inline-flex items-center gap-1.5 rounded-full bg-background/90 backdrop-blur px-3 py-1.5 text-xs font-semibold text-foreground border border-border hover:bg-background transition-colors"
-            >
-              <Home className="h-3.5 w-3.5 text-primary" /> 30-min drop-in this evening
-            </button>
-            <button
-              type="button"
-              onClick={() => applyPreset("daycare-tomorrow")}
-              className="inline-flex items-center gap-1.5 rounded-full bg-background/90 backdrop-blur px-3 py-1.5 text-xs font-semibold text-foreground border border-border hover:bg-background transition-colors"
-            >
-              <Sparkles className="h-3.5 w-3.5 text-primary" /> Full day care tomorrow
-            </button>
-          </div>
-
-          <div className="bg-card rounded-3xl shadow-search border border-border/60 p-3 md:p-4 animate-fade-up">
-            {/* Main category tabs */}
-            <div className="flex gap-1 overflow-x-auto pb-2 mb-2 border-b border-border scrollbar-none">
-              {SERVICE_CATEGORIES.map((c) => (
-                <button
-                  key={c.slug}
-                  onClick={() => setCategory(c.slug)}
-                  className={cn(
-                    "whitespace-nowrap px-4 py-2 text-sm font-semibold rounded-full transition-all",
-                    category === c.slug
-                      ? "bg-primary text-primary-foreground"
-                      : "text-muted-foreground hover:text-foreground hover:bg-secondary",
-                  )}
-                >
-                  {c.label}
-                </button>
-              ))}
-            </div>
-
-            {/* Subcategory chips */}
-            <div className="flex flex-wrap gap-2 px-1 pb-3 border-b border-border">
-              {activeCategory.subs.map((s) => {
-                const active = sub === s.slug;
-                const Icon = SUB_ICONS[s.slug] ?? PawPrint;
-                return (
-                  <button
-                    key={s.slug}
-                    type="button"
-                    onClick={() => setSub(s.slug)}
-                    className={cn(
-                      "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors",
-                      active
-                        ? "bg-accent text-accent-foreground border-accent"
-                        : "bg-background text-foreground/80 border-border hover:bg-secondary",
-                    )}
-                  >
-                    <Icon className="h-3.5 w-3.5" />
-                    {s.label}
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Search row */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-2 mt-2">
-              <div className="md:col-span-5">
-                <LocationCombobox value={location} onChange={setLocation} />
+        <div className="mt-10 md:mt-14 max-w-6xl">
+          <div className="bg-card rounded-3xl shadow-search border border-border/60 p-4 md:p-6 animate-fade-up">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-3">
+              {/* I'm looking for */}
+              <div className="lg:col-span-3">
+                <label className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground">
+                  I'm looking for
+                </label>
+                <Select value={sub} onValueChange={(v) => setSub(v as SubServiceSlug)}>
+                  <SelectTrigger className="mt-1 h-12 rounded-xl border-border bg-background">
+                    <SelectValue placeholder="Select a service" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {SERVICE_OPTIONS.map((s) => (
+                      <SelectItem key={s.value} value={s.value}>
+                        {s.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
 
-              <Popover>
-                <PopoverTrigger asChild>
-                  <button className="md:col-span-4 flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-secondary/60 transition-colors text-left">
-                    <CalendarIcon className="h-5 w-5 text-primary shrink-0" />
-                    <div className="flex-1 min-w-0">
-                      <div className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground">When</div>
-                      <div className="text-sm font-medium truncate">
+              {/* For my */}
+              <div className="lg:col-span-2">
+                <label className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground">
+                  For my
+                </label>
+                <Select value={petType} onValueChange={setPetType}>
+                  <SelectTrigger className="mt-1 h-12 rounded-xl border-border bg-background">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {PET_OPTIONS.map((p) => {
+                      const Icon = p.icon;
+                      return (
+                        <SelectItem key={p.value} value={p.value}>
+                          <span className="inline-flex items-center gap-2">
+                            <Icon className="h-4 w-4 text-primary" />
+                            {p.label}
+                          </span>
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Where */}
+              <div className="lg:col-span-3">
+                <label className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground">
+                  Where
+                </label>
+                <Input
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  placeholder="City or suburb"
+                  className="mt-1 h-12 rounded-xl border-border bg-background"
+                />
+              </div>
+
+              {/* Dates */}
+              <div className="lg:col-span-2">
+                <label className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground">
+                  Dates
+                </label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <button
+                      className={cn(
+                        "mt-1 h-12 w-full inline-flex items-center gap-2 px-3 rounded-xl border border-border bg-background text-sm font-medium hover:bg-secondary/60 transition-colors",
+                        !dates?.from && "text-muted-foreground",
+                      )}
+                    >
+                      <CalendarIcon className="h-4 w-4 text-primary shrink-0" />
+                      <span className="truncate">
                         {dates?.from
                           ? dates.to
                             ? `${format(dates.from, "d MMM")} – ${format(dates.to, "d MMM")}`
                             : format(dates.from, "d MMM yyyy")
-                          : <span className="text-muted-foreground/70">Add dates</span>}
-                      </div>
-                    </div>
-                  </button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 rounded-2xl" align="start">
-                  <Calendar
-                    mode="range"
-                    selected={dates}
-                    onSelect={setDates}
-                    numberOfMonths={2}
-                    className={cn("p-3 pointer-events-auto")}
-                  />
-                </PopoverContent>
-              </Popover>
+                          : "Add dates"}
+                      </span>
+                    </button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0 rounded-2xl" align="start">
+                    <Calendar
+                      mode="range"
+                      selected={dates}
+                      onSelect={setDates}
+                      numberOfMonths={2}
+                      className={cn("p-3 pointer-events-auto")}
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
 
-              <PetDetailsModal
-                pets={pets}
-                onChange={setPets}
-                trigger={
-                  <button className="md:col-span-3 flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-secondary/60 transition-colors text-left w-full">
-                    <Users className="h-5 w-5 text-primary shrink-0" />
-                    <div className="flex-1 text-left min-w-0">
-                      <div className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground">Pets</div>
-                      <div className="text-sm font-medium truncate">
-                        {pets.length
-                          ? `${pets.length} pet${pets.length > 1 ? "s" : ""} added`
-                          : <span className="text-muted-foreground/70">Add pets</span>}
-                      </div>
-                    </div>
-                  </button>
-                }
-              />
+              {/* Time */}
+              <div className="lg:col-span-2">
+                <label className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground">
+                  Time
+                </label>
+                <div className="mt-1 grid grid-cols-2 gap-1.5">
+                  <Select value={startTime} onValueChange={setStartTime}>
+                    <SelectTrigger className="h-12 rounded-xl border-border bg-background px-2 text-xs">
+                      <SelectValue placeholder="Start" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {HOURS.map((h) => (
+                        <SelectItem key={h.value} value={h.value}>
+                          {h.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Select value={endTime} onValueChange={setEndTime}>
+                    <SelectTrigger className="h-12 rounded-xl border-border bg-background px-2 text-xs">
+                      <SelectValue placeholder="End" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {HOURS.map((h) => (
+                        <SelectItem key={h.value} value={h.value}>
+                          {h.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
             </div>
 
-            {/* Conditional time slot row */}
-            {showTimeSlots && (
-              <div className="mt-3 px-2 animate-fade-in">
-                <div className="flex items-center justify-between gap-2 mb-2">
-                  <Label className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground">
-                    Preferred time &amp; duration
-                  </Label>
-                  <span className="text-[11px] text-muted-foreground/80 hidden sm:inline">
-                    Filter for walkers, groomers, drop-ins, or day care during your preferred hours
-                  </span>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {TIME_SLOTS.map((slot) => {
-                    const active = timeSlots.includes(slot.value);
-                    return (
-                      <button
-                        key={slot.value}
-                        type="button"
-                        onClick={() => toggleSlot(slot.value)}
-                        className={cn(
-                          "px-3 py-1.5 rounded-full text-xs font-medium border transition-colors",
-                          active
-                            ? "bg-primary text-primary-foreground border-primary"
-                            : "bg-background text-foreground border-border hover:bg-secondary",
-                        )}
-                      >
-                        <span className="font-semibold">{slot.label}</span>
-                        <span className={cn("ml-2", active ? "text-primary-foreground/80" : "text-muted-foreground")}>
-                          {slot.hours}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-
-                {/* Duration (single-select) — primary for hourly services */}
-                <div className="mt-3">
-                  <div className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground mb-1.5">
-                    Duration
-                  </div>
-                  <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="Duration">
-                    {HERO_DURATIONS.map((d) => {
-                      const active = duration === d.value;
-                      return (
-                        <button
-                          key={d.value}
-                          type="button"
-                          role="radio"
-                          aria-checked={active}
-                          onClick={() => setDuration(active ? undefined : d.value)}
-                          className={cn(
-                            "px-3 py-1.5 rounded-full text-xs font-semibold border transition-colors",
-                            active
-                              ? "bg-accent text-accent-foreground border-accent"
-                              : "bg-background text-foreground border-border hover:bg-secondary",
-                          )}
-                        >
-                          {d.label}
-                        </button>
-                      );
-                    })}
-                  </div>
-                  <p className="mt-2 text-[11px] leading-relaxed text-muted-foreground max-w-2xl">
-                    Most providers recommend <span className="font-semibold text-foreground">60 minutes minimum</span> for
-                    walks, drop-ins &amp; grooming (includes travel + quality time). Shorter bookings may be declined or
-                    adjusted.
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {/* Action row */}
-            <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-2 mt-3 pt-3 border-t border-border">
-              <div className="flex flex-wrap items-center gap-2">
-                <button
-                  type="button"
-                  onClick={handleSearch}
-                  className="inline-flex items-center gap-2 px-3 py-2 text-sm font-semibold text-foreground/70 hover:text-foreground"
-                >
-                  <SlidersHorizontal className="h-4 w-4" /> More filters
-                  <ChevronDown className="h-4 w-4" />
-                </button>
-                <span
-                  aria-live="polite"
-                  className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1 text-xs font-semibold text-foreground"
-                >
-                  <PawPrint className="h-3.5 w-3.5 text-primary" />
-                  {matchCount} provider{matchCount === 1 ? "" : "s"} match
-                </span>
-                {hasAnyFilter && (
-                  <button
-                    type="button"
-                    onClick={clearAll}
-                    className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold text-muted-foreground hover:text-foreground"
-                  >
-                    <X className="h-3.5 w-3.5" /> Clear all filters
-                  </button>
-                )}
-              </div>
-
+            <div className="mt-4 flex justify-end">
               <Button
                 size="lg"
                 onClick={handleSearch}
-                className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground shadow-cta px-8 h-12 font-semibold"
+                className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-cta px-8 h-12 font-semibold w-full sm:w-auto"
               >
-                <Search className="h-5 w-5 mr-2" /> Search
+                <Search className="h-5 w-5 mr-2" /> Search Providers
               </Button>
             </div>
-          </div>
-
-          <div className="mt-4 text-sm text-background/90 drop-shadow flex flex-wrap gap-x-2 gap-y-1 items-center">
-            <span>Popular:</span>
-            {POPULAR_LOCATIONS.map((city, i) => (
-              <span key={city} className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => setLocation(city)}
-                  className="underline-offset-4 hover:underline hover:text-background transition-colors"
-                >
-                  {city}
-                </button>
-                {i < POPULAR_LOCATIONS.length - 1 && <span aria-hidden>·</span>}
-              </span>
-            ))}
           </div>
         </div>
       </div>
