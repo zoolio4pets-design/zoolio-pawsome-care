@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { format } from "date-fns";
 import {
   CalendarIcon,
@@ -32,6 +32,7 @@ import heroVideo from "@/assets/hero-pets.mp4.asset.json";
 import { useGoToSearch } from "@/lib/search-state";
 import type { CategorySlug, SubServiceSlug } from "@/data/services";
 import { categoryForSub, SERVICE_CATEGORIES } from "@/data/services";
+import { toast } from "@/hooks/use-toast";
 
 const PET_OPTIONS = [
   { value: "large-dog", label: "Large Dog", icon: Dog },
@@ -47,6 +48,17 @@ const HOURS = Array.from({ length: 15 }, (_, i) => {
   return { value: `${String(h).padStart(2, "0")}:00`, label: `${((h + 11) % 12) + 1}:00 ${h < 12 ? "AM" : "PM"}` };
 });
 
+const isSameDay = (a: Date, b: Date) =>
+  a.getFullYear() === b.getFullYear() &&
+  a.getMonth() === b.getMonth() &&
+  a.getDate() === b.getDate();
+
+const startOfToday = () => {
+  const d = new Date();
+  d.setHours(0, 0, 0, 0);
+  return d;
+};
+
 export const HeroSearch = () => {
   const [sub, setSub] = useState<SubServiceSlug>("dog-walking");
   const [petType, setPetType] = useState<string>("large-dog");
@@ -55,6 +67,64 @@ export const HeroSearch = () => {
   const [startTime, setStartTime] = useState<string | undefined>();
   const [endTime, setEndTime] = useState<string | undefined>();
   const goToSearch = useGoToSearch();
+
+  // Re-evaluate "now" each minute so today's start-time options stay accurate.
+  const [now, setNow] = useState<Date>(() => new Date());
+  useEffect(() => {
+    const id = setInterval(() => setNow(new Date()), 60_000);
+    return () => clearInterval(id);
+  }, []);
+
+  const isStartToday = !!dates?.from && isSameDay(dates.from, now);
+
+  // Start-time options: if start date is today, only allow hours strictly later than now.
+  const startHourOptions = useMemo(() => {
+    if (!isStartToday) return HOURS;
+    return HOURS.filter((h) => {
+      const hour = parseInt(h.value.slice(0, 2), 10);
+      return hour > now.getHours();
+    });
+  }, [isStartToday, now]);
+
+  // End-time options: must be at least 1 hour after start time.
+  const endHourOptions = useMemo(() => {
+    if (!startTime) return HOURS;
+    const startHour = parseInt(startTime.slice(0, 2), 10);
+    return HOURS.filter((h) => parseInt(h.value.slice(0, 2), 10) >= startHour + 1);
+  }, [startTime]);
+
+  // Auto-bump endTime to at least startTime + 1h when startTime changes.
+  useEffect(() => {
+    if (!startTime) return;
+    const startHour = parseInt(startTime.slice(0, 2), 10);
+    const minEnd = startHour + 1;
+    if (!endTime || parseInt(endTime.slice(0, 2), 10) < minEnd) {
+      const bump = HOURS.find((h) => parseInt(h.value.slice(0, 2), 10) >= minEnd);
+      if (bump) setEndTime(bump.value);
+    }
+  }, [startTime]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // If today and current startTime is no longer valid (time has passed), clear it.
+  useEffect(() => {
+    if (!isStartToday || !startTime) return;
+    const startHour = parseInt(startTime.slice(0, 2), 10);
+    if (startHour <= now.getHours()) setStartTime(undefined);
+  }, [isStartToday, now, startTime]);
+
+  const handleEndTimeChange = (v: string) => {
+    if (startTime) {
+      const startHour = parseInt(startTime.slice(0, 2), 10);
+      const endHour = parseInt(v.slice(0, 2), 10);
+      if (endHour - startHour < 1) {
+        toast({
+          title: "Minimum booking is 1 hour",
+          description: "Services must be booked for a minimum of one hour.",
+        });
+        return;
+      }
+    }
+    setEndTime(v);
+  };
 
   const handleSearch = () => {
     const c = categoryForSub(sub);
@@ -195,6 +265,7 @@ export const HeroSearch = () => {
                       selected={dates}
                       onSelect={setDates}
                       numberOfMonths={1}
+                      disabled={{ before: startOfToday() }}
                       className={cn("p-3 pointer-events-auto")}
                     />
                   </PopoverContent>
@@ -212,19 +283,25 @@ export const HeroSearch = () => {
                       <SelectValue placeholder="Start" />
                     </SelectTrigger>
                     <SelectContent>
-                      {HOURS.map((h) => (
-                        <SelectItem key={h.value} value={h.value}>
-                          {h.label}
-                        </SelectItem>
-                      ))}
+                      {startHourOptions.length === 0 ? (
+                        <div className="px-3 py-2 text-xs text-muted-foreground">
+                          No times available today
+                        </div>
+                      ) : (
+                        startHourOptions.map((h) => (
+                          <SelectItem key={h.value} value={h.value}>
+                            {h.label}
+                          </SelectItem>
+                        ))
+                      )}
                     </SelectContent>
                   </Select>
-                  <Select value={endTime} onValueChange={setEndTime}>
+                  <Select value={endTime} onValueChange={handleEndTimeChange} disabled={!startTime}>
                     <SelectTrigger className="h-10 md:h-12 rounded-xl border-border bg-background px-2 text-xs">
                       <SelectValue placeholder="End" />
                     </SelectTrigger>
                     <SelectContent>
-                      {HOURS.map((h) => (
+                      {endHourOptions.map((h) => (
                         <SelectItem key={h.value} value={h.value}>
                           {h.label}
                         </SelectItem>
@@ -232,6 +309,11 @@ export const HeroSearch = () => {
                     </SelectContent>
                   </Select>
                 </div>
+                {startTime && (
+                  <p className="mt-1 text-[10px] text-muted-foreground">
+                    Minimum booking is 1 hour.
+                  </p>
+                )}
               </div>
             </div>
 
