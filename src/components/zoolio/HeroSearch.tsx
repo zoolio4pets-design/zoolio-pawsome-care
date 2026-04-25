@@ -84,31 +84,31 @@ export const HeroSearch = () => {
         <div className="absolute inset-0 bg-gradient-to-r from-foreground/40 to-transparent" />
       </div>
 
-      <div className="container-zoolio pt-16 pb-24 md:pt-28 md:pb-40">
+      <div className="container-zoolio pt-10 pb-12 md:pt-28 md:pb-40">
         <div className="max-w-3xl animate-fade-up">
-          <span className="inline-flex items-center gap-2 rounded-full bg-background/80 backdrop-blur px-4 py-1.5 text-xs font-semibold text-primary border border-border">
+          <span className="inline-flex items-center gap-2 rounded-full bg-background/80 backdrop-blur px-3 py-1 text-[11px] md:text-xs font-semibold text-primary border border-border">
             <PawPrint className="h-3.5 w-3.5" /> Trusted by 50,000+ South African pet parents
           </span>
-          <h1 className="mt-5 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-background leading-[1.05] drop-shadow-md">
+          <h1 className="mt-3 md:mt-5 text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-background leading-[1.1] md:leading-[1.05] drop-shadow-md">
             Loving Pet Care for every{" "}
             <span className="italic text-accent">Neighbourhood.</span>
           </h1>
-          <p className="mt-5 text-lg md:text-xl text-background/90 max-w-xl drop-shadow">
+          <p className="mt-3 md:mt-5 text-sm md:text-xl text-background/90 max-w-xl drop-shadow">
             Book trusted pet care across South Africa—for paws, scales, and tails.
           </p>
         </div>
 
         {/* Search card */}
-        <div className="mt-10 md:mt-14 max-w-6xl">
-          <div className="bg-card rounded-3xl shadow-search border border-border/60 p-4 md:p-6 animate-fade-up">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-3">
+        <div className="mt-6 md:mt-14 max-w-6xl">
+          <div className="bg-card/95 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-search border border-border/60 p-3 md:p-6 animate-fade-up">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-2 md:gap-3">
               {/* I'm looking for */}
               <div className="lg:col-span-3">
                 <label className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground">
                   I'm looking for
                 </label>
                 <Select value={sub} onValueChange={(v) => setSub(v as SubServiceSlug)}>
-                  <SelectTrigger className="mt-1 h-12 rounded-xl border-border bg-background">
+                  <SelectTrigger className="mt-1 h-10 md:h-12 rounded-xl border-border bg-background text-sm">
                     <SelectValue placeholder="Select a service" />
                   </SelectTrigger>
                   <SelectContent className="max-h-[420px]">
@@ -134,7 +134,7 @@ export const HeroSearch = () => {
                   For my
                 </label>
                 <Select value={petType} onValueChange={setPetType}>
-                  <SelectTrigger className="mt-1 h-12 rounded-xl border-border bg-background">
+                  <SelectTrigger className="mt-1 h-10 md:h-12 rounded-xl border-border bg-background text-sm">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -162,7 +162,7 @@ export const HeroSearch = () => {
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
                   placeholder="City or suburb"
-                  className="mt-1 h-12 rounded-xl border-border bg-background"
+                  className="mt-1 h-10 md:h-12 rounded-xl border-border bg-background text-sm"
                 />
               </div>
 
@@ -175,7 +175,7 @@ export const HeroSearch = () => {
                   <PopoverTrigger asChild>
                     <button
                       className={cn(
-                        "mt-1 h-12 w-full inline-flex items-center gap-2 px-3 rounded-xl border border-border bg-background text-sm font-medium hover:bg-secondary/60 transition-colors",
+                        "mt-1 h-10 md:h-12 w-full inline-flex items-center gap-2 px-3 rounded-xl border border-border bg-background text-sm font-medium hover:bg-secondary/60 transition-colors",
                         !dates?.from && "text-muted-foreground",
                       )}
                     >
@@ -194,7 +194,7 @@ export const HeroSearch = () => {
                       mode="range"
                       selected={dates}
                       onSelect={setDates}
-                      numberOfMonths={2}
+                      numberOfMonths={1}
                       className={cn("p-3 pointer-events-auto")}
                     />
                   </PopoverContent>
@@ -208,7 +208,7 @@ export const HeroSearch = () => {
                 </label>
                 <div className="mt-1 grid grid-cols-2 gap-1.5">
                   <Select value={startTime} onValueChange={setStartTime}>
-                    <SelectTrigger className="h-12 rounded-xl border-border bg-background px-2 text-xs">
+                    <SelectTrigger className="h-10 md:h-12 rounded-xl border-border bg-background px-2 text-xs">
                       <SelectValue placeholder="Start" />
                     </SelectTrigger>
                     <SelectContent>
@@ -220,7 +220,7 @@ export const HeroSearch = () => {
                     </SelectContent>
                   </Select>
                   <Select value={endTime} onValueChange={setEndTime}>
-                    <SelectTrigger className="h-12 rounded-xl border-border bg-background px-2 text-xs">
+                    <SelectTrigger className="h-10 md:h-12 rounded-xl border-border bg-background px-2 text-xs">
                       <SelectValue placeholder="End" />
                     </SelectTrigger>
                     <SelectContent>
@@ -235,11 +235,11 @@ export const HeroSearch = () => {
               </div>
             </div>
 
-            <div className="mt-4 flex justify-end">
+            <div className="mt-3 md:mt-4 flex justify-end">
               <Button
                 size="lg"
                 onClick={handleSearch}
-                className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-cta px-8 h-12 font-semibold w-full sm:w-auto"
+                className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-cta px-6 md:px-8 h-11 md:h-12 font-semibold w-full sm:w-auto text-sm md:text-base"
               >
                 <Search className="h-5 w-5 mr-2" /> Search Providers
               </Button>
