@@ -2,13 +2,10 @@ import { useEffect, useMemo, useState } from "react";
 import { format } from "date-fns";
 import {
   CalendarIcon,
-  PawPrint,
   Search,
-  ChevronDown,
   Dog,
   Cat,
   Fish,
-  Bird,
   Rabbit,
   Bug,
 } from "lucide-react";
