@@ -32,9 +32,6 @@ import {
 const links: { label: string; href: string }[] = [
   { label: "Search Providers", href: "/#services" },
   { label: "Become a Provider", href: "/#become-sitter" },
-  { label: "Pricing", href: "/pricing" },
-  { label: "About", href: "/about" },
-  { label: "FAQ", href: "/faq" },
 ];
 
 type ServiceGroup = {
