@@ -1,6 +1,6 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Sun, Moon, Star } from "lucide-react";
-import { useGoToSearch } from "@/lib/search-state";
 import {
   SERVICE_CATEGORIES,
   type CategorySlug,
@@ -71,7 +71,6 @@ const CATEGORY_ICON: Record<CategorySlug, typeof Sun> = {
 const CATEGORY_ORDER: CategorySlug[] = ["daytime", "overnight", "other"];
 
 export const Services = () => {
-  const goToSearch = useGoToSearch();
   const [activeCat, setActiveCat] = useState<CategorySlug>("daytime");
 
   const category = SERVICE_CATEGORIES.find((c) => c.slug === activeCat)!;
@@ -133,12 +132,9 @@ export const Services = () => {
           className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-7 animate-fade-up"
         >
           {category.subs.map((sub) => (
-            <button
+            <Link
               key={sub.slug}
-              type="button"
-              onClick={() =>
-                goToSearch({ category: activeCat, subs: [sub.slug] })
-              }
+              to={`/services/${sub.slug}`}
               className="group text-left bg-card rounded-2xl border border-border/60 overflow-hidden hover:border-primary/40 hover:shadow-card transition-all duration-300"
             >
               <div className="aspect-[4/3] overflow-hidden bg-muted">
@@ -157,7 +153,7 @@ export const Services = () => {
                   {CARD_DESC[sub.slug] ?? sub.blurb}
                 </p>
               </div>
-            </button>
+            </Link>
           ))}
         </div>
       </div>

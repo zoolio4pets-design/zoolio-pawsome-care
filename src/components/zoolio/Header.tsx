@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Menu,
   PawPrint,
@@ -28,15 +29,18 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 
-const links = [
-  { label: "Search Providers", href: "#services" },
-  { label: "Become a Provider", href: "#become-sitter" },
+const links: { label: string; href: string }[] = [
+  { label: "Search Providers", href: "/#services" },
+  { label: "Become a Provider", href: "/#become-sitter" },
+  { label: "Pricing", href: "/pricing" },
+  { label: "About", href: "/about" },
+  { label: "FAQ", href: "/faq" },
 ];
 
 type ServiceGroup = {
   title: string;
   icon: typeof Sun;
-  items: { label: string; icon: typeof Bed }[];
+  items: { label: string; icon: typeof Bed; slug: string }[];
 };
 
 const serviceGroups: ServiceGroup[] = [
@@ -44,28 +48,28 @@ const serviceGroups: ServiceGroup[] = [
     title: "Daytime Care",
     icon: Sun,
     items: [
-      { label: "Day Care", icon: Sparkles },
-      { label: "Dog Walking", icon: Footprints },
-      { label: "Drop-In Visits", icon: Home },
-      { label: "Health, Wellness & Grooming", icon: Scissors },
-      { label: "Digital & Event Services", icon: Camera },
+      { label: "Day Care", icon: Sparkles, slug: "day-care" },
+      { label: "Dog Walking", icon: Footprints, slug: "dog-walking" },
+      { label: "Drop-In Visits", icon: Home, slug: "drop-in-visits" },
+      { label: "Health, Wellness & Grooming", icon: Scissors, slug: "wellness-grooming" },
+      { label: "Digital & Event Services", icon: Camera, slug: "digital-events" },
     ],
   },
   {
     title: "Overnight Care",
     icon: Moon,
     items: [
-      { label: "Boarding (in sitter's home)", icon: Bed },
-      { label: "Pet & House Sitting (in your home)", icon: KeyRound },
+      { label: "Boarding (in sitter's home)", icon: Bed, slug: "boarding" },
+      { label: "Pet & House Sitting (in your home)", icon: KeyRound, slug: "house-sitting" },
     ],
   },
   {
     title: "Specialized Care",
     icon: Star,
     items: [
-      { label: "Aquarium & Aquatic Services", icon: Fish },
-      { label: "Reptile & Exotic Pet Care", icon: PawIcon },
-      { label: "Small Animal & Bird Care", icon: Bird },
+      { label: "Aquarium & Aquatic Services", icon: Fish, slug: "aquatic" },
+      { label: "Reptile & Exotic Pet Care", icon: PawIcon, slug: "reptile-exotic" },
+      { label: "Small Animal & Bird Care", icon: Bird, slug: "small-animal-bird" },
     ],
   },
 ];
@@ -73,6 +77,21 @@ const serviceGroups: ServiceGroup[] = [
 export const Header = () => {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const goToHash = (href: string) => {
+    if (href.startsWith("/#")) {
+      const id = href.slice(2);
+      if (window.location.pathname === "/") {
+        document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+      } else {
+        navigate("/");
+        setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" }), 50);
+      }
+    } else {
+      navigate(href);
+    }
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -90,22 +109,22 @@ export const Header = () => {
       }`}
     >
       <div className="container-zoolio flex h-16 md:h-20 items-center justify-between">
-        <a href="/" className="flex items-center gap-2 font-display text-2xl font-bold text-primary">
+        <Link to="/" className="flex items-center gap-2 font-display text-2xl font-bold text-primary">
           <span className="grid h-9 w-9 place-items-center rounded-full bg-primary text-primary-foreground">
             <PawPrint className="h-5 w-5" />
           </span>
           Zoolio
-        </a>
+        </Link>
 
         <nav className="hidden lg:flex items-center gap-1">
           {links.map((l) => (
-            <a
+            <button
               key={l.label}
-              href={l.href}
+              onClick={() => goToHash(l.href)}
               className="px-4 py-2 text-sm font-medium text-foreground/80 hover:text-primary rounded-full hover:bg-secondary transition-colors"
             >
               {l.label}
-            </a>
+            </button>
           ))}
           <DropdownMenu>
             <DropdownMenuTrigger className="inline-flex items-center gap-1 px-4 py-2 text-sm font-medium text-foreground/80 hover:text-primary rounded-full hover:bg-secondary transition-colors outline-none">
@@ -123,10 +142,10 @@ export const Header = () => {
                     </DropdownMenuLabel>
                     {g.items.map((s) => (
                       <DropdownMenuItem key={s.label} asChild className="rounded-xl">
-                        <a href="#services" className="flex items-center gap-2 cursor-pointer pl-6">
+                        <Link to={`/services/${s.slug}`} className="flex items-center gap-2 cursor-pointer pl-6">
                           <s.icon className="h-4 w-4 text-primary" />
                           {s.label}
-                        </a>
+                        </Link>
                       </DropdownMenuItem>
                     ))}
                   </div>
@@ -153,14 +172,16 @@ export const Header = () => {
         <div className="lg:hidden border-t border-border bg-background animate-fade-in">
           <div className="container-zoolio py-4 flex flex-col gap-1">
             {links.map((l) => (
-              <a
+              <button
                 key={l.label}
-                href={l.href}
-                onClick={() => setOpen(false)}
-                className="px-3 py-3 text-base font-medium rounded-lg hover:bg-secondary"
+                onClick={() => {
+                  setOpen(false);
+                  goToHash(l.href);
+                }}
+                className="text-left px-3 py-3 text-base font-medium rounded-lg hover:bg-secondary"
               >
                 {l.label}
-              </a>
+              </button>
             ))}
             {serviceGroups.map((g) => (
               <div key={g.title}>
@@ -169,15 +190,15 @@ export const Header = () => {
                   {g.title}
                 </div>
                 {g.items.map((s) => (
-                  <a
+                  <Link
                     key={s.label}
-                    href="#services"
+                    to={`/services/${s.slug}`}
                     onClick={() => setOpen(false)}
                     className="flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg hover:bg-secondary pl-6"
                   >
                     <s.icon className="h-4 w-4 text-primary" />
                     {s.label}
-                  </a>
+                  </Link>
                 ))}
               </div>
             ))}
