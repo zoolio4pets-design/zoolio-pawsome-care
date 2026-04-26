@@ -8,36 +8,36 @@ import {
 
 const faqs = [
   {
-    q: "Is Zoolio free to use?",
-    a: "Yes! For pet parents, joining and browsing our community is 100% free.",
+    q: "Is Zoolio free?",
+    a: "You bet! For pet parents, joining the party and finding your pet's soulmate is 100% free.",
   },
   {
-    q: "How do I know my pet is safe?",
-    a: "Every provider on Zoolio undergoes a verification process, including ID checks and community reviews, so you can book with total peace of mind.",
+    q: "Safety first?",
+    a: "Always. Every provider is hand-verified and community-vetted, so your peace of mind stays sky-high.",
   },
   {
     q: "How do I pay?",
-    a: "Payments are handled safely and securely through our platform. Your funds are only released once the job is successfully completed.",
+    a: "Super simple and super safe! You pay through our secure platform, and we keep the vibes good by making sure everyone is protected.",
   },
   {
-    q: "What is the cancellation policy?",
-    a: "Life happens! You'll receive a 100% automatic refund if you cancel more than 5 days before the service begins.",
+    q: "What if plans change?",
+    a: "Every cloud has a silver lining! Life happens, so we keep things flexible: get a 100% refund on daily bookings cancelled 5+ days before the fun starts, or on hourly bookings cancelled 24+ hours before service time. Easy, breezy, happy!",
   },
 ];
 
 const FAQ = () => (
   <PageShell
-    title="FAQ"
-    description="Answers to the most common questions about Zoolio—South Africa's trusted pet care marketplace."
+    title="No Stress, Just Paws-itive Vibes"
+    description="Quick answers to the questions every Mzansi pet parent asks before booking trusted care on Zoolio."
   >
     <section className="container-zoolio py-16 md:py-24">
       <div className="max-w-3xl mx-auto">
-        <span className="text-xs font-bold uppercase tracking-widest text-primary">FAQ</span>
+        <span className="text-xs font-bold uppercase tracking-widest text-primary">No Stress, Just Paws-itive Vibes</span>
         <h1 className="mt-3 text-4xl md:text-5xl font-bold text-foreground tracking-tight">
-          Quick answers, happy tails.
+          Big questions. Happy answers.
         </h1>
         <p className="mt-4 text-lg text-muted-foreground">
-          Everything you need to know before booking trusted care for your fur, fin, or feather family.
+          Everything you need to know before booking trusted care for your fur, fin, or feather family — minus the boring bits.
         </p>
 
         <Accordion type="single" collapsible className="mt-10">

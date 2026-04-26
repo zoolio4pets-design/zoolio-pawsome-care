@@ -2,29 +2,31 @@ import { PageShell } from "@/components/zoolio/PageShell";
 import { Heart, ShieldCheck, MapPin } from "lucide-react";
 
 const pillars = [
-  { icon: ShieldCheck, title: "Trust First", body: "Verified providers, ID checks, and community reviews keep every booking safe." },
-  { icon: Heart, title: "Pets Like Family", body: "Every wag, purr, chirp and splash gets the VIP treatment from people who care." },
-  { icon: MapPin, title: "Proudly Mzansi", body: "Built locally for South African pet parents and caregivers, from Joburg to Cape Town." },
+  { icon: ShieldCheck, title: "Verified Heroes", body: "Every local pet hero is hand-verified and community-vetted, so peace of mind comes standard." },
+  { icon: Heart, title: "Pets Like Family", body: "Every wag, purr, chirp and splash gets the full VIP treatment from humans who genuinely care." },
+  { icon: MapPin, title: "Proudly Mzansi", body: "Built right here for South African pet parents and caregivers — from Joburg to Cape Town and everywhere in between." },
 ];
 
 const About = () => (
   <PageShell
-    title="About Us"
-    description="Zoolio is South Africa's trusted community for loving pet care—built for pet parents and caregivers across Mzansi."
+    title="The Zoolio Story"
+    description="Zoolio is Mzansi's biggest celebration of paws, scales, and tails — a community of pet-obsessed humans making every pet's day the best day."
   >
     <section className="container-zoolio py-16 md:py-24">
       <div className="max-w-3xl">
-        <span className="text-xs font-bold uppercase tracking-widest text-primary">About Zoolio</span>
+        <span className="text-xs font-bold uppercase tracking-widest text-primary">The Zoolio Story</span>
         <h1 className="mt-3 text-4xl md:text-6xl font-bold text-foreground tracking-tight">
-          South Africa's heart for pet care.
+          Mzansi's biggest celebration of paws, scales & tails.
         </h1>
         <p className="mt-6 text-lg md:text-xl text-muted-foreground leading-relaxed">
-          Zoolio is South Africa's heart for pet care. We are a secure community connecting loving
-          pet owners with verified local caregivers. Whether it's a tail-wagging walk or a cozy
-          overnight stay, our mission is to ensure every pet in Mzansi feels like family.
+          Zoolio is Mzansi's biggest celebration of paws, scales, and tails! We aren't just a
+          platform — we're a community of pet-obsessed humans making sure every furry friend in
+          South Africa lives their absolute best life.
         </p>
         <p className="mt-4 text-lg md:text-xl text-muted-foreground leading-relaxed">
-          We've built a place where trust comes first and every pet gets the VIP treatment.
+          We believe every pet deserves a best friend even when you're away, and every local pet
+          hero deserves a chance to shine. We're here to make pet care the most exciting part of
+          your day!
         </p>
       </div>
 

@@ -57,8 +57,9 @@ export function useGoToSearch() {
       }
     }
     toast({
-      title: "Provider search is coming soon",
-      description: "We're polishing this experience for you. Stay tuned!",
+      title: "The fun is almost here!",
+      description:
+        "We're currently hand-picking the absolute best pet heroes in Mzansi. Sit tight — tails will be wagging soon!",
     });
   }, []);
 }
