@@ -3,7 +3,13 @@ import { Link } from "react-router-dom";
 
 type FooterLink = { label: string; to: string };
 const cols: { title: string; links: FooterLink[] }[] = [
-  { title: "Services", links: [{ label: "The Good Stuff (Pricing)", to: "/pricing" }] },
+  {
+    title: "Pricing",
+    links: [
+      { label: "For Pet Parents", to: "/pricing/pet-parents" },
+      { label: "For Providers", to: "/pricing/providers" },
+    ],
+  },
   { title: "Company", links: [{ label: "About Us", to: "/about" }, { label: "FAQ", to: "/faq" }] },
   { title: "Legal", links: [{ label: "Terms", to: "#" }, { label: "Privacy Policy", to: "#" }] },
 ];
