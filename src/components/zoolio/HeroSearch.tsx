@@ -156,10 +156,7 @@ export const HeroSearch = () => {
 
       <div className="container-zoolio pt-10 pb-12 md:pt-28 md:pb-40">
         <div className="max-w-3xl animate-fade-up">
-          <span className="inline-flex items-center gap-2 rounded-full bg-background/80 backdrop-blur px-3 py-1 text-[11px] md:text-xs font-semibold text-primary border border-border">
-            <PawPrint className="h-3.5 w-3.5" /> Trusted by 50,000+ South African pet parents
-          </span>
-          <h1 className="mt-3 md:mt-5 text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-background leading-[1.1] md:leading-[1.05] drop-shadow-md">
+          <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-background leading-[1.1] md:leading-[1.05] drop-shadow-md">
             Loving Pet Care for every{" "}
             <span className="italic text-accent">Neighbourhood.</span>
           </h1>
