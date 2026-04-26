@@ -35,23 +35,23 @@ const SUB_IMAGES: Record<SubServiceSlug, string> = {
 };
 
 const FUN_DESC: Record<SubServiceSlug, string> = {
-  "day-care": "The ultimate daytime playdate! Perfect for social pets who want snuggles and play while you're at work.",
-  "dog-walking": "Neighbourhood adventures and joyful sniffs. We turn every stroll into an epic workout for your pup.",
-  "drop-in-visits": "The 'hello and cuddle' service. Ideal for independent cats and pups needing a quick meal or potty break.",
-  "digital-events": "From paw-ty planning to professional snaps. Treat your fur-babies like the true celebrities they are.",
-  "wellness-grooming": "Pampering without the vet-trip jitters. Beauty and wellness in the comfort of home.",
-  boarding: "A thrilling sleepover adventure! Your pet joins a trusted sitter's cozy home for one-on-one fun.",
-  "house-sitting": "Travel stress-free while your pet stays in their own bed, keeping their routine exactly as they like it.",
-  aquatic: "Expert love for our unique friends. Because scales, fins, and feathers deserve superstar treatment too.",
-  "reptile-exotic": "Expert love for our unique friends. Because scales, fins, and feathers deserve superstar treatment too.",
-  "small-animal-bird": "Expert love for our unique friends. Because scales, fins, and feathers deserve superstar treatment too.",
+  "day-care": "The Ultimate Playdate! Why stay home when you can be making new best friends?",
+  "dog-walking": "The Sniff-ari! Turning your neighbourhood stroll into an epic adventure.",
+  "drop-in-visits": "The Quick Cuddle. Perfect for a snack, a potty break, and a whole lot of love.",
+  "digital-events": "Pup-arazzi & Paw-ties! Because your pet belongs on the red carpet.",
+  "wellness-grooming": "The Spa Day. All the pampering, zero vet-visit jitters.",
+  boarding: "The Ultimate Sleepover! A vacation for your pet while you're on your own vacation.",
+  "house-sitting": "The Stay-cation. Trusted heroes staying over so your pet never misses a beat in their own home.",
+  aquatic: "VIP (Very Important Pets)! Fins, feathers, or scales — we speak their language too.",
+  "reptile-exotic": "VIP (Very Important Pets)! Fins, feathers, or scales — we speak their language too.",
+  "small-animal-bird": "VIP (Very Important Pets)! Fins, feathers, or scales — we speak their language too.",
 };
 
 const HIGHLIGHTS = [
-  "Verified, reviewed local caregivers",
-  "Secure platform payments",
-  "Free to browse for pet parents",
-  "Cancel up to 5 days before for a full refund",
+  "Hand-verified, community-vetted local pet heroes",
+  "Safe, secure platform payments",
+  "100% free to browse for pet parents",
+  "Flexible refunds — every cloud has a silver lining",
 ];
 
 const ServiceDetail = () => {

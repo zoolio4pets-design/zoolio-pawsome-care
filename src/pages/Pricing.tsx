@@ -3,17 +3,17 @@ import { Check, Heart, Sparkles, Lock } from "lucide-react";
 
 const Pricing = () => (
   <PageShell
-    title="Pricing & Payments"
-    description="Zoolio is free for pet parents. Providers grow their business for a simple R99/month subscription."
+    title="Transparent & Happy"
+    description="Zoolio is free for pet parents. Providers grow their business for a simple R99/month — no hidden surprises, ever."
   >
     <section className="container-zoolio py-16 md:py-24">
       <div className="max-w-3xl mx-auto text-center">
-        <span className="text-xs font-bold uppercase tracking-widest text-primary">Pricing & Payments</span>
+        <span className="text-xs font-bold uppercase tracking-widest text-primary">Transparent & Happy</span>
         <h1 className="mt-3 text-4xl md:text-6xl font-bold text-foreground tracking-tight">
-          Simple, fair, transparent.
+          Simple pricing. Pure happiness.
         </h1>
         <p className="mt-5 text-lg md:text-xl text-muted-foreground leading-relaxed">
-          No hidden fees. Just loving care, safely paid.
+          No hidden surprises. No messy math. Just loving care, safely paid.
         </p>
       </div>
 
@@ -23,12 +23,12 @@ const Pricing = () => (
             <Heart className="h-6 w-6" />
           </span>
           <h2 className="mt-5 text-2xl md:text-3xl font-bold text-foreground">For Pet Parents</h2>
-          <p className="mt-2 text-4xl md:text-5xl font-bold text-primary">Free</p>
+          <p className="mt-2 text-4xl md:text-5xl font-bold text-primary">R0.00</p>
           <p className="mt-4 text-muted-foreground leading-relaxed">
-            Zoolio is free for clients. You only pay the listed price for the care your pet receives.
+            Total cost to join? R0.00. You only pay for the love and care your pet receives — no hidden surprises, ever!
           </p>
           <ul className="mt-6 space-y-3 text-sm text-foreground/80">
-            {["Free to join and browse", "Verified local caregivers", "Secure platform payments"].map((i) => (
+            {["Free to join and browse", "Verified local pet heroes", "Safe, secure platform payments"].map((i) => (
               <li key={i} className="flex items-start gap-2">
                 <Check className="h-4 w-4 text-primary mt-1 shrink-0" /> {i}
               </li>
@@ -45,10 +45,10 @@ const Pricing = () => (
             R99<span className="text-xl font-semibold opacity-80">/month</span>
           </p>
           <p className="mt-4 leading-relaxed opacity-90">
-            Grow your pet care business for a simple subscription of R99/month. No hidden fees, just more happy clients.
+            Ready to turn your passion into a business? It's just R99/month to access our entire community. No messy math, just pure opportunity.
           </p>
           <ul className="mt-6 space-y-3 text-sm">
-            {["Unlimited bookings", "Profile in local search", "Reviews & community trust"].map((i) => (
+            {["Unlimited bookings", "Featured in local search", "Reviews & community trust"].map((i) => (
               <li key={i} className="flex items-start gap-2">
                 <Check className="h-4 w-4 mt-1 shrink-0" /> {i}
               </li>
@@ -62,10 +62,9 @@ const Pricing = () => (
           <Lock className="h-6 w-6" />
         </span>
         <div>
-          <h3 className="text-lg md:text-xl font-bold text-foreground">Secure handling, every time</h3>
+          <h3 className="text-lg md:text-xl font-bold text-foreground">The Safety Net</h3>
           <p className="mt-2 text-muted-foreground leading-relaxed">
-            We handle the logistics so you don't have to. Our secure system holds payments safely
-            until the service is finished, protecting both pet parents and sitters.
+            We handle the money stuff with secure handling so you don't have to worry. Everyone is protected, and payments are only released when the tail starts wagging — job completed!
           </p>
         </div>
       </div>
