@@ -10,6 +10,13 @@ const cols: { title: string; links: FooterLink[] }[] = [
       { label: "For Providers", to: "/pricing/providers" },
     ],
   },
+  {
+    title: "Services",
+    links: [
+      { label: "How to Sign Up", to: "/how-to-sign-up" },
+      { label: "How to Manage my Profile", to: "/how-to-manage-profile" },
+    ],
+  },
   { title: "Company", links: [{ label: "About Us", to: "/about" }, { label: "FAQ", to: "/faq" }] },
   { title: "Legal", links: [{ label: "Terms", to: "#" }, { label: "Privacy Policy", to: "#" }] },
 ];
