@@ -60,12 +60,21 @@ export const Header = () => {
         </Link>
 
         <nav className="hidden lg:flex items-center gap-1">
+          {links.map((l) => (
+            <button
+              key={l.label}
+              onClick={() => goToHash(l.href)}
+              className="px-4 py-2 text-sm font-medium text-foreground/80 hover:text-primary rounded-full hover:bg-secondary transition-colors"
+            >
+              {l.label}
+            </button>
+          ))}
           <DropdownMenu>
             <DropdownMenuTrigger className="px-4 py-2 text-sm font-medium text-foreground/80 hover:text-primary rounded-full hover:bg-secondary transition-colors inline-flex items-center gap-1 outline-none">
               Provider Services
               <ChevronDown className="h-4 w-4" />
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" className="w-72 rounded-2xl p-2">
+            <DropdownMenuContent align="end" className="w-72 rounded-2xl p-2">
               {SERVICE_CATEGORIES.map((cat, idx) => (
                 <div key={cat.slug}>
                   {idx > 0 && <DropdownMenuSeparator />}
@@ -85,15 +94,6 @@ export const Header = () => {
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
-          {links.map((l) => (
-            <button
-              key={l.label}
-              onClick={() => goToHash(l.href)}
-              className="px-4 py-2 text-sm font-medium text-foreground/80 hover:text-primary rounded-full hover:bg-secondary transition-colors"
-            >
-              {l.label}
-            </button>
-          ))}
         </nav>
 
         <div className="hidden lg:flex items-center gap-2">
