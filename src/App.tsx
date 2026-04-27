@@ -11,6 +11,8 @@ import Pricing from "./pages/Pricing.tsx";
 import PricingPetParents from "./pages/PricingPetParents.tsx";
 import PricingProviders from "./pages/PricingProviders.tsx";
 import ServiceDetail from "./pages/ServiceDetail.tsx";
+import HowToSignUp from "./pages/HowToSignUp.tsx";
+import HowToManageProfile from "./pages/HowToManageProfile.tsx";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +30,8 @@ const App = () => (
           <Route path="/pricing/pet-parents" element={<PricingPetParents />} />
           <Route path="/pricing/providers" element={<PricingProviders />} />
           <Route path="/services/:slug" element={<ServiceDetail />} />
+          <Route path="/how-to-sign-up" element={<HowToSignUp />} />
+          <Route path="/how-to-manage-profile" element={<HowToManageProfile />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

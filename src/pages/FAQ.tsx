@@ -13,7 +13,7 @@ const faqs = [
   },
   {
     q: "Safety first?",
-    a: "Always. Every provider is hand-verified and community-vetted, so your peace of mind stays sky-high.",
+    a: "Always. Every provider is ID verified and community-vetted, so your peace of mind stays sky-high.",
   },
   {
     q: "How do I pay?",
