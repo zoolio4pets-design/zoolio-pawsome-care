@@ -2,7 +2,7 @@ import { PageShell } from "@/components/zoolio/PageShell";
 import { Heart, ShieldCheck, MapPin } from "lucide-react";
 
 const pillars = [
-  { icon: ShieldCheck, title: "Verified Heroes", body: "Every local pet hero is hand-verified and community-vetted, so peace of mind comes standard." },
+  { icon: ShieldCheck, title: "Verified Heroes", body: "Every local pet hero is ID verified and community-vetted, so peace of mind comes standard." },
   { icon: Heart, title: "Pets Like Family", body: "Every wag, purr, chirp and splash gets the full VIP treatment from humans who genuinely care." },
   { icon: MapPin, title: "Proudly Mzansi", body: "Built right here for South African pet parents and caregivers — from Joburg to Cape Town and everywhere in between." },
 ];

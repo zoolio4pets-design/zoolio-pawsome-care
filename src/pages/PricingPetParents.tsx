@@ -5,7 +5,7 @@ const benefits = [
   {
     icon: ShieldCheck,
     title: "Mzansi's Best Heroes",
-    body: "Every sitter is hand-verified and community-reviewed. Browse beautiful profiles, read real stories, and find the perfect match for your pet's unique personality.",
+    body: "Every sitter is ID verified and community-reviewed. Browse beautiful profiles, read real stories, and find the perfect match for your pet's unique personality.",
   },
   {
     icon: Lock,
