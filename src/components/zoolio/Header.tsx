@@ -1,7 +1,16 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, PawPrint, X } from "lucide-react";
+import { ChevronDown, Menu, PawPrint, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { SERVICE_CATEGORIES } from "@/data/services";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const links: { label: string; href: string }[] = [
   { label: "Search Providers", href: "/#services" },
@@ -51,6 +60,31 @@ export const Header = () => {
         </Link>
 
         <nav className="hidden lg:flex items-center gap-1">
+          <DropdownMenu>
+            <DropdownMenuTrigger className="px-4 py-2 text-sm font-medium text-foreground/80 hover:text-primary rounded-full hover:bg-secondary transition-colors inline-flex items-center gap-1 outline-none">
+              Provider Services
+              <ChevronDown className="h-4 w-4" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-72 rounded-2xl p-2">
+              {SERVICE_CATEGORIES.map((cat, idx) => (
+                <div key={cat.slug}>
+                  {idx > 0 && <DropdownMenuSeparator />}
+                  <DropdownMenuLabel className="text-xs font-bold uppercase tracking-wide text-muted-foreground px-2 pt-2">
+                    {cat.label}
+                  </DropdownMenuLabel>
+                  {cat.subs.map((sub) => (
+                    <DropdownMenuItem
+                      key={sub.slug}
+                      onClick={() => navigate(`/services/${sub.slug}`)}
+                      className="rounded-lg cursor-pointer text-sm"
+                    >
+                      {sub.label}
+                    </DropdownMenuItem>
+                  ))}
+                </div>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
           {links.map((l) => (
             <button
               key={l.label}
@@ -78,6 +112,33 @@ export const Header = () => {
       {open && (
         <div className="lg:hidden border-t border-border bg-background animate-fade-in">
           <div className="container-zoolio py-4 flex flex-col gap-1">
+            <details className="group">
+              <summary className="list-none flex items-center justify-between px-3 py-3 text-base font-medium rounded-lg hover:bg-secondary cursor-pointer">
+                Provider Services
+                <ChevronDown className="h-4 w-4 transition-transform group-open:rotate-180" />
+              </summary>
+              <div className="pl-2 pb-2">
+                {SERVICE_CATEGORIES.map((cat) => (
+                  <div key={cat.slug} className="mt-2">
+                    <div className="px-3 py-1 text-xs font-bold uppercase tracking-wide text-muted-foreground">
+                      {cat.label}
+                    </div>
+                    {cat.subs.map((sub) => (
+                      <button
+                        key={sub.slug}
+                        onClick={() => {
+                          setOpen(false);
+                          navigate(`/services/${sub.slug}`);
+                        }}
+                        className="w-full text-left px-3 py-2 text-sm rounded-lg hover:bg-secondary"
+                      >
+                        {sub.label}
+                      </button>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </details>
             {links.map((l) => (
               <button
                 key={l.label}
