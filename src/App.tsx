@@ -13,6 +13,9 @@ import PricingProviders from "./pages/PricingProviders.tsx";
 import ServiceDetail from "./pages/ServiceDetail.tsx";
 import HowToSignUp from "./pages/HowToSignUp.tsx";
 import HowToManageProfile from "./pages/HowToManageProfile.tsx";
+import Cancellations from "./pages/Cancellations.tsx";
+import Refunds from "./pages/Refunds.tsx";
+import PaymentFlow from "./pages/PaymentFlow.tsx";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +35,9 @@ const App = () => (
           <Route path="/services/:slug" element={<ServiceDetail />} />
           <Route path="/how-to-sign-up" element={<HowToSignUp />} />
           <Route path="/how-to-manage-profile" element={<HowToManageProfile />} />
+          <Route path="/cancellations" element={<Cancellations />} />
+          <Route path="/refunds" element={<Refunds />} />
+          <Route path="/payment-flow" element={<PaymentFlow />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
