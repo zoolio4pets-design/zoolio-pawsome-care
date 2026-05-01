@@ -98,7 +98,7 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
   },
   {
     slug: "other",
-    label: "Other Services",
+    label: "Specialized Care",
     intro:
       "Who says fun is just for fluffballs? Splash into sparkling aquarium care for your fin-tastic fish friends, unlock expert magic for reptiles and exotics with that wow-factor touch, or shower birds and tiny superstars like rabbits, guinea pigs, and hamsters with gentle, giggly love. Every pet gets the VIP superstar treatment!",
     subs: [
