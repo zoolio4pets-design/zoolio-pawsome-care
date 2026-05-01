@@ -151,6 +151,12 @@ export const HeroSearch = () => {
         <div className="absolute inset-0 bg-gradient-to-r from-foreground/40 to-transparent" />
       </div>
 
+      {/* Bottom fade — blends video seamlessly into the next section's background */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-[20%] -z-10 bg-gradient-to-b from-transparent to-background"
+      />
+
       <div className="container-zoolio pt-10 pb-12 md:pt-28 md:pb-40">
         <div className="max-w-3xl animate-fade-up">
           <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-background leading-[1.1] md:leading-[1.05] drop-shadow-md">
