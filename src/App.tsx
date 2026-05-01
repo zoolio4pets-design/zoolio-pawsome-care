@@ -16,6 +16,9 @@ import HowToManageProfile from "./pages/HowToManageProfile.tsx";
 import Cancellations from "./pages/Cancellations.tsx";
 import Refunds from "./pages/Refunds.tsx";
 import PaymentFlow from "./pages/PaymentFlow.tsx";
+import Terms from "./pages/Terms.tsx";
+import PrivacyPolicy from "./pages/PrivacyPolicy.tsx";
+import CookiePolicy from "./pages/CookiePolicy.tsx";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +41,9 @@ const App = () => (
           <Route path="/cancellations" element={<Cancellations />} />
           <Route path="/refunds" element={<Refunds />} />
           <Route path="/payment-flow" element={<PaymentFlow />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/cookie-policy" element={<CookiePolicy />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
