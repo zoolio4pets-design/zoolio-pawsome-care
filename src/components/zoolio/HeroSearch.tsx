@@ -40,7 +40,7 @@ const PET_OPTIONS = [
   { value: "small-animal", label: "Small Animal", icon: Rabbit },
   { value: "bird", label: "Bird", icon: Bird },
   { value: "reptile", label: "Reptile", icon: Bug },
-  { value: "exotic-pet", label: "Exotic Pet", icon: Turtle },
+  { value: "exotic-pet", label: "Exotic Animal", icon: Turtle },
   { value: "fish", label: "Fish", icon: Fish },
 ] as const;
 
