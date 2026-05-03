@@ -11,7 +11,7 @@ const providerSteps = [
   { icon: UserPlus, title: "Click 'Become a Provider'", body: "Enter your basic details and tell us a little about who you are." },
   { icon: BadgeCheck, title: "Instant ID Verification", body: "Complete our secure, instant ID Verification—quick, simple, and safe." },
   { icon: CreditCard, title: "Start Your Subscription", body: "Add your card details to start your R99/month subscription. That's it for the boring bit!" },
-  { icon: Sparkles, title: "Build Your Profile", body: "Set your rates, upload your gallery, and get ready for your first booking request!" },
+  { icon: Sparkles, title: "Build Your Profile", body: "List all your amazing services—and yes, you can add more than one! Set your rates, update your experience, and get ready for your first booking request!" },
 ];
 
 const StepGrid = ({ steps }: { steps: typeof petParentSteps }) => (
