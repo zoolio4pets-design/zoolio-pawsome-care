@@ -9,12 +9,12 @@ const content: Record<Audience, { icon: typeof ShieldCheck; title: string; desc:
     {
       icon: ShieldCheck,
       title: "ID Verified Heroes",
-      desc: "Every provider undergoes mandatory biometric ID verification. Book with confidence knowing your pets are with trusted, local professionals.",
+      desc: "Every provider undergoes mandatory ID verification. Book with confidence knowing your pets are with verified, local professionals.",
     },
     {
       icon: Lock,
       title: "The Secure Safety Net",
-      desc: "Your payment is held in 'Secure Handling' and only released once the job is done. If plans change, our 72-hour safety window ensures a fair resolution.",
+      desc: "Your payment is held securely and only get released once the job is done. If plans change, our 72-hour safety window ensures a fair resolution.",
     },
     {
       icon: Heart,
@@ -31,12 +31,12 @@ const content: Record<Audience, { icon: typeof ShieldCheck; title: string; desc:
     {
       icon: Wallet,
       title: "Guaranteed Payouts",
-      desc: "No more chasing invoices. Once the 'Secure Safety Net' window passes, your earnings clear directly into your Zoolio Wallet for quick, easy withdrawals.",
+      desc: "No more chasing money. Once the 72 hour window passes, your earnings gets paid directly into your Zoolio Wallet for quick, easy withdrawals.",
     },
     {
       icon: CalendarCheck,
-      title: "Protection for your Time",
-      desc: "Your time is valuable. Our smart cancellation safeguards ensure that if a client cancels late, you still receive your payout for the reserved time.",
+      title: "Smart Booking System",
+      desc: "Take control of your schedule! Set your own operating days and times, mark yourself unavailable on the fly, and enjoy a system that automatically prevents double bookings. Plus, our cancellation safeguards ensure you still receive your payout should a client cancel late.",
     },
   ],
 };
