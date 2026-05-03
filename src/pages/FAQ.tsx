@@ -23,6 +23,26 @@ const faqs = [
     q: "What if plans change?",
     a: "Every cloud has a silver lining! Life happens, so we keep things flexible: get a 100% refund on daily bookings cancelled 5+ days before the fun starts, or on hourly bookings cancelled 24+ hours before service time. Easy, breezy, happy!",
   },
+  {
+    q: "Can I message a Provider before booking?",
+    a: "To keep everyone's details safe and secure, private messaging unlocks as soon as your booking payment is successful. Once unlocked, you can chat, share instructions, and get excited for your pet's adventure!",
+  },
+  {
+    q: "What if I have a parrot, a python, or a hamster?",
+    a: "We love them all! While dogs and cats are our most frequent flyers, Zoolio is home to specialized care for birds, fish, reptiles, exotic pets, and small superstars like rabbits and guinea pigs.",
+  },
+  {
+    q: "How do Pet Profiles work?",
+    a: "Think of it as a digital CV for your best friend! You create one reusable profile with their personality quirks, medical needs, and favorite photos. It makes booking any future service a breeze.",
+  },
+  {
+    q: "When is a job officially 'completed'?",
+    a: "After the service ends, a 72-hour safety window begins. If you're happy, you can click 'Job Completed' immediately! If you forget, our system assumes everything went perfectly and auto-completes the job after those 72 hours pass.",
+  },
+  {
+    q: "How do Providers get their earnings?",
+    a: "Once a job is completed and the safety window closes, funds clear into your secure Zoolio Wallet. From there, you can add your bank details and manually withdraw your money whenever you're ready for a payout.",
+  },
 ];
 
 const FAQ = () => (
