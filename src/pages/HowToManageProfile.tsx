@@ -1,5 +1,5 @@
 import { PageShell } from "@/components/zoolio/PageShell";
-import { PawPrint, History, Heart, CalendarClock, Image as ImageIcon, Wallet } from "lucide-react";
+import { PawPrint, History, Heart, CalendarClock, Sparkles, Wallet } from "lucide-react";
 
 const petParentItems = [
   { icon: PawPrint, title: "Update Pet Details", body: "Tweak names, photos, dietary notes, and quirky habits anytime—your pet's profile grows with them." },
@@ -9,7 +9,7 @@ const petParentItems = [
 
 const providerItems = [
   { icon: CalendarClock, title: "Real-Time Availability & Rates", body: "Update your calendar and change service rates on the fly—your dashboard moves at your pace." },
-  { icon: ImageIcon, title: "Services & Expertise", body: "Show off your magic! List multiple services, highlight your years of experience, and set your pet preferences to attract the perfect bookings for you." },
+  { icon: Sparkles, title: "Services & Expertise", body: "Show off your magic! List multiple services, highlight your years of experience, and set your pet preferences to attract the perfect bookings for you." },
   { icon: Wallet, title: "Zoolio Wallet & Payouts", body: "Track your earnings in the Secure Safety Net and add your bank details for quick, easy payouts." },
 ];
 
