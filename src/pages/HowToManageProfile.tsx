@@ -9,7 +9,7 @@ const petParentItems = [
 
 const providerItems = [
   { icon: CalendarClock, title: "Real-Time Availability & Rates", body: "Update your calendar and change service rates on the fly—your dashboard moves at your pace." },
-  { icon: ImageIcon, title: "Fresh Gallery Photos", body: "Upload new snaps of your happy clients to show off your magic and attract more bookings." },
+  { icon: ImageIcon, title: "Services & Expertise", body: "Show off your magic! List multiple services, highlight your years of experience, and set your pet preferences to attract the perfect bookings for you." },
   { icon: Wallet, title: "Zoolio Wallet & Payouts", body: "Track your earnings in the Secure Safety Net and add your bank details for quick, easy payouts." },
 ];
 
