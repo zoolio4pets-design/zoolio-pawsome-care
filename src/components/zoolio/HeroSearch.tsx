@@ -350,164 +350,25 @@ export const HeroSearch = () => {
 
           {/* Desktop expanded card */}
           <div className="hidden md:block bg-card/95 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-search border border-border/60 p-3 md:p-6 animate-fade-up">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-2 md:gap-3">
-              {/* I'm looking for */}
-              <div className="lg:col-span-3">
-                <label className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground">
-                  I'm looking for
-                </label>
-                <Select value={sub} onValueChange={(v) => setSub(v as SubServiceSlug)}>
-                  <SelectTrigger className="mt-1 h-10 md:h-12 rounded-xl border-border bg-background text-sm">
-                    <SelectValue placeholder="Select a service" />
-                  </SelectTrigger>
-                  <SelectContent className="max-h-[420px]">
-                    {SERVICE_CATEGORIES.map((cat) => (
-                      <SelectGroup key={cat.slug}>
-                        <SelectLabel className="text-[11px] font-bold uppercase tracking-wider text-primary">
-                          {cat.slug === "other" ? "Specialized Care" : cat.label}
-                        </SelectLabel>
-                        {cat.subs.map((s) => (
-                          <SelectItem key={s.slug} value={s.slug} className="pl-6">
-                            {s.label}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {/* For my */}
-              <div className="lg:col-span-2">
-                <label className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground">
-                  For my
-                </label>
-                <Select value={petType} onValueChange={setPetType}>
-                  <SelectTrigger className="mt-1 h-10 md:h-12 rounded-xl border-border bg-background text-sm">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {PET_OPTIONS.map((p) => {
-                      const Icon = p.icon;
-                      return (
-                        <SelectItem key={p.value} value={p.value}>
-                          <span className="inline-flex items-center gap-2">
-                            <Icon className="h-4 w-4 text-primary" />
-                            {p.label}
-                          </span>
-                        </SelectItem>
-                      );
-                    })}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {/* Where */}
-              <div className="lg:col-span-3">
-                <label className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground">
-                  Where
-                </label>
-                <Input
-                  value={location}
-                  onChange={(e) => setLocation(e.target.value)}
-                  placeholder="City or suburb"
-                  className="mt-1 h-10 md:h-12 rounded-xl border-border bg-background text-sm"
-                />
-              </div>
-
-              {/* Dates */}
-              <div className="lg:col-span-2">
-                <label className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground">
-                  Dates
-                </label>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <button
-                      className={cn(
-                        "mt-1 h-10 md:h-12 w-full inline-flex items-center gap-2 px-3 rounded-xl border border-border bg-background text-sm font-medium hover:bg-secondary/60 transition-colors",
-                        !dates?.from && "text-muted-foreground",
-                      )}
-                    >
-                      <CalendarIcon className="h-4 w-4 text-primary shrink-0" />
-                      <span className="truncate">
-                        {dates?.from
-                          ? dates.to
-                            ? `${format(dates.from, "d MMM")} – ${format(dates.to, "d MMM")}`
-                            : format(dates.from, "d MMM yyyy")
-                          : "Add dates"}
-                      </span>
-                    </button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0 rounded-2xl" align="start">
-                    <Calendar
-                      mode="range"
-                      selected={dates}
-                      onSelect={setDates}
-                      numberOfMonths={1}
-                      disabled={{ before: startOfToday() }}
-                      className={cn("p-3 pointer-events-auto")}
-                    />
-                  </PopoverContent>
-                </Popover>
-              </div>
-
-              {/* Time */}
-              <div className="lg:col-span-2">
-                <label className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground">
-                  Time
-                </label>
-                <div className="mt-1 grid grid-cols-2 gap-1.5">
-                  <Select value={startTime} onValueChange={setStartTime}>
-                    <SelectTrigger className="h-10 md:h-12 rounded-xl border-border bg-background px-2 text-xs">
-                      <SelectValue placeholder="Start" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {startHourOptions.length === 0 ? (
-                        <div className="px-3 py-2 text-xs text-muted-foreground">
-                          No times available today
-                        </div>
-                      ) : (
-                        startHourOptions.map((h) => (
-                          <SelectItem key={h.value} value={h.value}>
-                            {h.label}
-                          </SelectItem>
-                        ))
-                      )}
-                    </SelectContent>
-                  </Select>
-                  <Select value={endTime} onValueChange={handleEndTimeChange} disabled={!startTime}>
-                    <SelectTrigger className="h-10 md:h-12 rounded-xl border-border bg-background px-2 text-xs">
-                      <SelectValue placeholder="End" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {endHourOptions.map((h) => (
-                        <SelectItem key={h.value} value={h.value}>
-                          {h.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                {startTime && (
-                  <p className="mt-1 text-[10px] text-muted-foreground">
-                    Minimum booking is 1 hour.
-                  </p>
-                )}
-              </div>
-            </div>
-
-            <div className="mt-3 md:mt-4 flex justify-end">
-              <Button
-                size="lg"
-                onClick={handleSearch}
-                className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-cta px-6 md:px-8 h-11 md:h-12 font-semibold w-full sm:w-auto text-sm md:text-base"
-              >
-                <Search className="h-5 w-5 mr-2" /> Search Providers
-              </Button>
-            </div>
+            {formInner}
           </div>
         </div>
       </div>
+
+      {/* Mobile expanded sheet */}
+      <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+        <SheetContent
+          side="bottom"
+          className="md:hidden rounded-t-3xl border-t border-border/60 max-h-[90vh] overflow-y-auto p-5 pt-6"
+        >
+          <SheetHeader className="mb-3 text-left">
+            <SheetTitle className="text-base font-bold text-foreground">
+              Find your perfect care
+            </SheetTitle>
+          </SheetHeader>
+          {formInner}
+        </SheetContent>
+      </Sheet>
     </section>
   );
 };
