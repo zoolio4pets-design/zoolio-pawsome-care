@@ -14,6 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import {
   Select,
   SelectContent,
@@ -68,6 +69,7 @@ export const HeroSearch = () => {
   const [startTime, setStartTime] = useState<string | undefined>();
   const [endTime, setEndTime] = useState<string | undefined>();
   const goToSearch = useGoToSearch();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   // Re-evaluate "now" each minute so today's start-time options stay accurate.
   const [now, setNow] = useState<Date>(() => new Date());
@@ -135,6 +137,7 @@ export const HeroSearch = () => {
       location,
       dates,
     });
+    setMobileOpen(false);
   };
 
   return (
@@ -174,7 +177,19 @@ export const HeroSearch = () => {
 
         {/* Search card */}
         <div className="mt-6 md:mt-14 max-w-6xl">
-          <div className="bg-card/95 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-search border border-border/60 p-3 md:p-6 animate-fade-up">
+          {/* Mobile collapsed trigger */}
+          <button
+            type="button"
+            onClick={() => setMobileOpen(true)}
+            className="md:hidden w-full flex items-center gap-3 bg-card/95 backdrop-blur-sm border border-primary/30 rounded-full shadow-search px-5 h-12 text-left text-sm text-muted-foreground hover:border-primary/60 transition-colors animate-fade-up"
+            aria-label="Open search filters"
+          >
+            <Search className="h-4 w-4 text-primary shrink-0" />
+            <span className="truncate">Search services, dates, or pets...</span>
+          </button>
+
+          {/* Desktop expanded card */}
+          <div className="hidden md:block bg-card/95 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-search border border-border/60 p-3 md:p-6 animate-fade-up">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-2 md:gap-3">
               {/* I'm looking for */}
               <div className="lg:col-span-3">
